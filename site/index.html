@@ -1,0 +1,468 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Лунарио — пространство для понимания себя</title>
+  <meta name="description" content="Лунарио — персональное пространство для понимания себя: карта дня, ответы на вопросы, разборы по дате рождения, дневник и практики.">
+  <link rel="canonical" href="https://lunario.online/">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://lunario.online/">
+  <meta property="og:title" content="Лунарио — пространство для понимания себя">
+  <meta property="og:description" content="Карта дня, ответы на вопросы, разборы по дате рождения и дневник — в одном приложении. Открыть можно прямо в браузере, бесплатно.">
+  <meta property="og:locale" content="ru_RU">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <!-- манифест приложения: позволяет установить Лунарио прямо с лендинга -->
+  <link rel="manifest" href="/app/manifest.webmanifest">
+  <link rel="apple-touch-icon" href="/app/assets/icon-192.png">
+  <meta name="theme-color" content="#070510">
+  <meta name="apple-mobile-web-app-title" content="Лунарио">
+  <link rel="preload" href="/assets/fonts/inter-var-cyrillic.woff2" as="font" type="font/woff2" crossorigin>
+  <script>window.LUNARIO = { variant: '{{VARIANT}}', metrika: {{METRIKA_ID_JSON}} };</script>
+  {{METRIKA_HEAD}}
+  <style>
+    @font-face{
+      font-family:'Inter';font-style:normal;font-weight:400 800;font-display:swap;
+      src:url('/assets/fonts/inter-var-cyrillic.woff2') format('woff2');
+      unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;
+    }
+    @font-face{
+      font-family:'Inter';font-style:normal;font-weight:400 800;font-display:swap;
+      src:url('/assets/fonts/inter-var-latin.woff2') format('woff2');
+      unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+    }
+    :root{
+      --bg:#070510;
+      --bg-2:#0d0820;
+      --violet:#7c4dff;
+      --violet-2:#b07cff;
+      --blue:#7aa7ff;
+      --text:#f8f6ff;
+      --muted:#bdb6d7;
+      --line:rgba(255,255,255,.10);
+      --card:rgba(255,255,255,.055);
+      --card-2:rgba(255,255,255,.085);
+      --gold:#e8d8a8;
+      --shadow:0 20px 80px rgba(73,34,152,.28);
+    }
+    *{box-sizing:border-box}
+    [hidden]{display:none!important}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 20% 10%, rgba(102,56,255,.22), transparent 32%),
+        radial-gradient(circle at 85% 18%, rgba(58,90,255,.15), transparent 26%),
+        linear-gradient(180deg,var(--bg) 0%,#0b0717 58%,#070510 100%);
+      color:var(--text);
+      overflow-x:hidden;
+    }
+    body:before{
+      content:"";
+      position:fixed; inset:0;
+      pointer-events:none; z-index:-2;
+      background-image:
+        radial-gradient(circle, rgba(255,255,255,.92) 0 1px, transparent 1.4px),
+        radial-gradient(circle, rgba(176,124,255,.7) 0 1px, transparent 1.3px);
+      background-size:88px 88px, 137px 137px;
+      background-position:12px 20px, 70px 50px;
+      opacity:.26;
+    }
+    a{text-decoration:none;color:inherit}
+    .container{width:min(1180px,calc(100% - 40px));margin:0 auto}
+    .nav{
+      position:sticky; top:0; z-index:50;
+      backdrop-filter:blur(18px);
+      background:rgba(7,5,16,.62);
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .nav-inner{
+      height:76px; display:flex; align-items:center; justify-content:space-between; gap:24px;
+    }
+    .brand{display:flex;align-items:center;gap:12px;font-weight:800;letter-spacing:.08em}
+    .brand-mark{
+      width:34px;height:34px;border:1px solid rgba(255,255,255,.45);border-radius:50%;
+      box-shadow:0 0 30px rgba(124,77,255,.45) inset,0 0 30px rgba(124,77,255,.25);
+      position:relative;
+    }
+    .brand-mark:after{
+      content:"✦"; position:absolute; inset:0; display:grid; place-items:center; font-size:13px;
+    }
+    .nav-links{display:flex;gap:24px;color:#d8d2eb;font-size:14px}
+    .button{
+      display:inline-flex;align-items:center;justify-content:center;gap:10px;
+      min-height:52px;padding:0 24px;border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      background:linear-gradient(135deg,#8d5cff,#5a36ff);
+      box-shadow:0 12px 40px rgba(94,55,255,.28);
+      font-weight:750;transition:.25s ease;
+      color:var(--text);font-family:inherit;font-size:16px;cursor:pointer;
+    }
+    .button:hover{transform:translateY(-2px);box-shadow:0 16px 50px rgba(94,55,255,.38)}
+    .button:active{transform:scale(.96);transition:transform .12s cubic-bezier(.34,1.56,.64,1)}
+    .button:disabled{opacity:.6;cursor:default;transform:none}
+    .button.secondary{background:rgba(255,255,255,.06);box-shadow:none}
+    .button.small{min-height:42px;padding:0 18px;font-size:14px}
+    .hero{
+      display:flex;flex-direction:column;align-items:center;text-align:center;
+      padding:120px 0 104px;
+    }
+    .hero-mark{margin-bottom:32px;line-height:0;filter:drop-shadow(0 0 40px rgba(124,77,255,.45))}
+    .eyebrow{
+      color:#cdbbff; text-transform:uppercase; letter-spacing:.18em; font-size:12px; font-weight:800;
+      margin-bottom:18px;
+    }
+    h1{
+      font-family:Georgia, "Times New Roman", serif;
+      font-size:clamp(56px,8vw,104px); line-height:1; letter-spacing:-.02em;
+      margin:0 0 22px;
+    }
+    h2{
+      font-family:Georgia, "Times New Roman", serif;
+      font-size:clamp(36px,4.4vw,62px); line-height:1.02; letter-spacing:-.035em;
+      margin:0 0 18px;
+    }
+    h3{font-size:22px;margin:0 0 10px}
+    p{color:var(--muted);line-height:1.72;font-size:17px}
+    .hero-sub{max-width:620px;margin:0;font-size:19px;line-height:1.65}
+    .hero-actions{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:38px}
+    .install-hint{margin:18px 0 0;font-size:14.5px;color:#c9c1e4;max-width:520px}
+    .install-hint b{color:#efe9ff;font-weight:600}
+    .trust{display:flex;gap:20px;flex-wrap:wrap;justify-content:center;margin-top:32px;color:#d9d2ed;font-size:13px}
+    .trust span:before{content:"✦";color:#9f79ff;margin-right:8px}
+    .shots{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;max-width:940px;margin:0 auto}
+    .shots figure{margin:0}
+    .shots img{
+      width:100%;height:auto;display:block;border-radius:24px;
+      border:1px solid rgba(255,255,255,.12);
+      box-shadow:0 30px 80px rgba(20,8,56,.6);
+    }
+    .shots figcaption{margin-top:16px;font-size:14px;line-height:1.5;color:var(--muted);text-align:center}
+    .section{padding:110px 0;position:relative}
+    .section-head{max-width:760px;margin-bottom:46px}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    .card{
+      padding:28px;border-radius:26px;background:var(--card);
+      border:1px solid var(--line);box-shadow:var(--shadow);
+      min-height:210px;
+    }
+    .card .icon{font-size:25px;margin-bottom:26px;color:#bca3ff}
+    .card p{font-size:15px;margin-bottom:0}
+    .glass{
+      background:linear-gradient(180deg,rgba(255,255,255,.075),rgba(255,255,255,.035));
+      border:1px solid rgba(255,255,255,.09);
+    }
+    .quote{
+      font-family:Georgia,serif;font-size:clamp(30px,4vw,52px);line-height:1.15;
+      color:#fff;max-width:940px;margin:0;
+    }
+    .quote span{color:#b99cff}
+    .center{text-align:center}
+    .center .section-head{margin-left:auto;margin-right:auto}
+    .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:40px}
+    .step{padding-top:22px;border-top:1px solid var(--line)}
+    .step h3{margin-bottom:8px}
+    .step-num{font-family:Georgia,serif;font-size:38px;color:#8b66ff;margin-bottom:14px;line-height:1}
+    .final{
+      text-align:center;padding:145px 0 120px;
+      background:
+        radial-gradient(circle at 50% 30%,rgba(122,78,255,.28),transparent 28%),
+        linear-gradient(180deg,transparent,rgba(100,53,255,.08));
+    }
+    .planet{
+      width:120px;height:120px;border-radius:50%;margin:0 auto 34px;
+      background:radial-gradient(circle at 35% 32%,#faf7ff 0 7%,#c5b3ff 18%,#6d45df 46%,#21133f 75%);
+      box-shadow:0 0 80px rgba(126,82,255,.55);
+    }
+    footer{padding:34px 0;border-top:1px solid var(--line);color:#958cab;font-size:13px}
+    .footer-inner{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap}
+    footer a:hover{color:#d6cef0}
+    .cookie{
+      position:fixed;left:16px;right:16px;bottom:16px;z-index:90;
+      display:none;gap:16px;align-items:center;flex-wrap:wrap;justify-content:space-between;
+      max-width:820px;margin:0 auto;padding:16px 20px;border-radius:20px;
+      background:rgba(13,8,32,.92);backdrop-filter:blur(18px);
+      border:1px solid rgba(255,255,255,.12);box-shadow:0 20px 60px rgba(10,4,30,.6);
+    }
+    .cookie.show{display:flex}
+    .cookie p{margin:0;font-size:13.5px;color:#cdc6e4;flex:1 1 320px;line-height:1.5}
+    @media(max-width:920px){
+      .nav-links{display:none}
+      .hero{padding:84px 0 72px}
+      .grid,.steps{grid-template-columns:1fr 1fr}
+    }
+    @media(max-width:620px){
+      .container{width:min(100% - 40px,1180px)}
+      .nav-inner{height:66px}
+      .nav .button{display:none}
+      .hero{padding:64px 0 56px}
+      .hero-sub{font-size:17px}
+      .hero-actions{width:100%;flex-direction:column;gap:10px}
+      .hero-actions .button{width:100%}
+      .section{padding:78px 0}
+      .grid,.steps{grid-template-columns:1fr}
+      .shots{
+        display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;
+        margin:0 -20px;padding:0 20px 6px;-webkit-overflow-scrolling:touch;
+      }
+      .shots figure{flex:0 0 74%;scroll-snap-align:center}
+    }
+    @media(prefers-reduced-motion:reduce){
+      *{animation-duration:.01ms!important;transition-duration:.01ms!important}
+      html{scroll-behavior:auto}
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="container nav-inner">
+      <a class="brand" href="#top"><span class="brand-mark"></span>ЛУНАРИО</a>
+      <div class="nav-links">
+        <a href="#inside">Что внутри</a>
+        <a href="#how">Как это работает</a>
+        <a href="#faq">Вопросы</a>
+      </div>
+      <a class="button small js-app-open" href="/app/">Открыть приложение</a>
+    </div>
+  </nav>
+
+  <main id="top">
+    <section class="container hero">
+      <div class="hero-mark" aria-hidden="true">
+        <svg viewBox="0 0 32 32" width="104" height="104" role="img">
+          <path d="M24.5 18.6A9.5 9.5 0 1 1 13.4 7.5a7.9 7.9 0 0 0 11.1 11.1Z" fill="none" stroke="#e8d8a8" stroke-width="1" stroke-linejoin="round"/>
+          <circle cx="23" cy="9" r=".9" fill="#c8c0df"/>
+        </svg>
+      </div>
+      <h1>Лунарио</h1>
+      <p class="hero-sub">Пространство для понимания себя. Карта дня, ответы на вопросы, дневник и разбор отношений — когда нужно остановиться и услышать себя.</p>
+      <div class="hero-actions">
+        <a class="button js-app-open" href="/app/">Открыть приложение</a>
+        <button class="button secondary" type="button" id="installBtn" hidden>Установить на телефон</button>
+      </div>
+      <p class="install-hint" id="installHint" hidden></p>
+      <div class="trust">
+        <span>Бесплатный старт</span>
+        <span>Без регистрации</span>
+        <span>Данные хранятся в России</span>
+      </div>
+    </section>
+
+    <section class="section" id="screens">
+      <div class="container">
+        <div class="section-head">
+          <div class="eyebrow">Как это выглядит</div>
+          <h2>Три экрана, к которым возвращаются каждый день.</h2>
+        </div>
+        <div class="shots">
+          <figure>
+            <img src="/assets/screens/today.jpg" width="640" height="1385" loading="lazy" decoding="async"
+                 alt="Экран «Сегодня»: карта дня, счётчик дней подряд и выбор настроения">
+            <figcaption>Карта дня и настроение — минута утром</figcaption>
+          </figure>
+          <figure>
+            <img src="/assets/screens/ask.jpg" width="640" height="1385" loading="lazy" decoding="async"
+                 alt="Экран «Спросить»: вопрос «Стоит ли менять работу сейчас?» и ответ с пояснением">
+            <figcaption>Ответ приходит на конкретный вопрос</figcaption>
+          </figure>
+          <figure>
+            <img src="/assets/screens/journal.jpg" width="640" height="1385" loading="lazy" decoding="async"
+                 alt="Экран «Я»: записи дневника и список желаний с напоминаниями">
+            <figcaption>Дневник и желания — видите только вы</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="inside">
+      <div class="container">
+        <div class="section-head">
+          <div class="eyebrow">Что внутри</div>
+          <h2>Один вопрос. Много способов найти свой ответ.</h2>
+        </div>
+        <div class="grid">
+          <article class="card glass"><div class="icon">✦</div><h3>Ответ на вопрос</h3><p>Спросите о том, что занимает мысли: «Да / Нет», руна или расклад на три карты — с пояснением, а не сухим вердиктом.</p></article>
+          <article class="card glass"><div class="icon">◌</div><h3>Персональные разборы</h3><p>Индивидуальные интерпретации и подсказки на основе ваших данных и выбранных методик.</p></article>
+          <article class="card glass"><div class="icon">♡</div><h3>Совместимость</h3><p>Исследуйте отношения с партнёром, друзьями и близкими: притяжение, различия, зоны напряжения.</p></article>
+          <article class="card glass"><div class="icon">☽</div><h3>Прогнозы и периоды</h3><p>Дополнительная точка зрения на текущий жизненный период, перемены и решения.</p></article>
+          <article class="card glass"><div class="icon">✧</div><h3>Практики</h3><p>Небольшие упражнения и вопросы, которые помогают остановиться и вернуться к себе.</p></article>
+          <article class="card glass"><div class="icon">⌁</div><h3>Дневник</h3><p>Сохраняйте мысли, наблюдения и важные моменты, чтобы со временем видеть свои изменения.</p></article>
+        </div>
+      </div>
+    </section>
+
+    
+
+    <section class="section" id="how">
+      <div class="container">
+        <div class="section-head">
+          <div class="eyebrow">Как это работает</div>
+          <h2>От вопроса — к пониманию.</h2>
+        </div>
+        <div class="steps">
+          <article class="step"><div class="step-num">01</div><h3>Расскажите немного о себе</h3><p>Только то, чем готовы поделиться.</p></article>
+          <article class="step"><div class="step-num">02</div><h3>Выберите, что волнует</h3><p>Отношения, состояние, деньги, выбор, перемены или просто разговор.</p></article>
+          <article class="step"><div class="step-num">03</div><h3>Получите разбор и возвращайтесь</h3><p>Лунарио поможет посмотреть на ситуацию глубже. Наблюдения сохраняются — со временем видно, как меняетесь вы.</p></article>
+        </div>
+      </div>
+    </section>
+
+    
+
+    
+
+    <section class="section" id="faq">
+      <div class="container">
+        <div class="section-head">
+          <div class="eyebrow">FAQ</div>
+          <h2>Что ещё важно знать.</h2>
+        </div>
+        <details><summary>Лунарио — это психолог?</summary><p>Нет. Лунарио не заменяет психологическую, медицинскую или иную профессиональную помощь. Это инструмент саморефлексии и исследования себя.</p></details>
+        <details><summary>Это приложение только про астрологию?</summary><p>Нет. Лунарио объединяет несколько подходов: карты, руны, нумерологию, дневник и практики самонаблюдения.</p></details>
+        <details><summary>Что будет бесплатно?</summary><p>Карта дня, ответы на вопросы, руны, нумерология, дневник, желания и отметки настроения — всё это бесплатно и без ограничений. Расширенные разборы появятся в Лунарио+.</p></details>
+        <details><summary>Как начать пользоваться?</summary><p>Нажмите «Открыть приложение» — Лунарио работает прямо в браузере, без установки и регистрации. Аккаунт можно завести позже, чтобы записи сохранились при смене телефона.</p></details>
+        <details><summary>Нужно ли ставить приложение из магазина?</summary><p>Не обязательно. Лунарио можно добавить на экран телефона кнопкой «Установить на телефон» — появится обычная иконка. Версии для магазинов приложений готовятся.</p></details>
+        <details><summary>Что происходит с моими записями?</summary><p>Они хранятся на серверах в России и видны только вам. Историю можно очистить, а аккаунт — удалить вместе со всеми данными в разделе «Данные и приватность».</p></details>
+      </div>
+    </section>
+
+    
+  </main>
+
+  <footer>
+    <div class="container footer-inner">
+      <div>© 2026 Лунарио</div>
+      <div><a href="https://www.instagram.com/lunario.online/" target="_blank" rel="noopener">Instagram*</a> · <a href="https://t.me/lunario_oline" target="_blank" rel="noopener">Telegram</a></div>
+      <div><a href="/politika">Политика конфиденциальности</a> · <a href="/soglasie">Пользовательское соглашение</a></div>
+      <div style="flex:1 1 100%;font-size:12px;line-height:1.6;color:#7d7593">* Instagram принадлежит компании Meta, признанной в Российской Федерации экстремистской организацией; её деятельность на территории РФ запрещена.</div>
+    </div>
+  </footer>
+
+  <div class="cookie" id="cookieBar">
+    <p>Мы используем cookie, чтобы сайт работал корректно и мы понимали, какие материалы полезны. Подробнее — в <a href="/politika" target="_blank" rel="noopener" style="color:#c3aaff;text-decoration:underline">Политике конфиденциальности</a>.</p>
+    <button class="button small" type="button" id="cookieOk">Хорошо</button>
+  </div>
+
+  <script>
+  /* Лунарио — фронт лендинга: аналитика А/Б, установка приложения, cookie-баннер. Без зависимостей. */
+  (function () {
+    'use strict';
+    var V = (window.LUNARIO && window.LUNARIO.variant) || 'A';
+    var METRIKA = (window.LUNARIO && window.LUNARIO.metrika) || null;
+    var PREVIEW = /[?&]ab=(A|B)\b/.test(location.search);
+
+    /* ── UTM: берём из URL, храним на сессию ── */
+    var UTM_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'];
+    var utm = {};
+    try {
+      var qs = new URLSearchParams(location.search);
+      var stored = JSON.parse(sessionStorage.getItem('lunario_utm') || '{}');
+      UTM_KEYS.forEach(function (k) {
+        var val = qs.get(k) || stored[k];
+        if (val) utm[k] = String(val).slice(0, 200);
+      });
+      if (Object.keys(utm).length) sessionStorage.setItem('lunario_utm', JSON.stringify(utm));
+    } catch (e) { /* приватный режим — работаем без сохранения */ }
+
+    /* ── события ── */
+    function track(type, extra) {
+      if (PREVIEW) return;
+      try {
+        var payload = JSON.stringify(Object.assign({ t: type, v: V }, extra || {}));
+        if (navigator.sendBeacon) {
+          navigator.sendBeacon('/api/event', new Blob([payload], { type: 'application/json' }));
+        } else {
+          fetch('/api/event', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: payload, keepalive: true });
+        }
+      } catch (e) { /* аналитика не должна ломать сайт */ }
+      if (METRIKA && typeof window.ym === 'function') {
+        try { window.ym(METRIKA, 'reachGoal', type, { ab_variant: V }); } catch (e) {}
+      }
+    }
+    track('landing_view', { utm_source: utm.utm_source || '' });
+
+    document.querySelectorAll('.js-cta').forEach(function (el) {
+      el.addEventListener('click', function () {
+        track('cta_click', { cta: el.getAttribute('data-cta') || '' });
+      });
+    });
+
+    /* ── приложение: открыть и установить ──────────────────────────────
+       Установку предлагает сам браузер — присылает beforeinstallprompt.
+       Мы придерживаем это событие и показываем свою кнопку в первом экране.
+       У Safari такого события нет, поэтому там объясняем словами. */
+    var installBtn = document.getElementById('installBtn');
+    var installHint = document.getElementById('installHint');
+    var deferredPrompt = null;
+    var installed = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+    var isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent) ||
+      (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+    document.querySelectorAll('.js-app-open').forEach(function (el) {
+      el.addEventListener('click', function () { track('app_open'); });
+    });
+
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('/sw.js').catch(function () { /* без SW сайт работает как обычно */ });
+      });
+    }
+
+    function hint(html) {
+      if (!installHint) return;
+      installHint.innerHTML = html;
+      installHint.hidden = false;
+    }
+
+    if (installBtn && !installed) {
+      window.addEventListener('beforeinstallprompt', function (e) {
+        e.preventDefault();
+        deferredPrompt = e;
+        installBtn.hidden = false;
+        track('pwa_offer');
+      });
+
+      installBtn.addEventListener('click', function () {
+        if (deferredPrompt) {
+          deferredPrompt.prompt();
+          deferredPrompt.userChoice.then(function (choice) {
+            var ok = choice && choice.outcome === 'accepted';
+            track(ok ? 'pwa_accepted' : 'pwa_declined');
+            if (ok) installBtn.hidden = true;
+            deferredPrompt = null;
+          }).catch(function () {});
+          return;
+        }
+        track('pwa_hint');
+        hint(isIOS
+          ? 'В Safari нажмите <b>«Поделиться»</b> внизу экрана и выберите <b>«На экран „Домой“»</b> — Лунарио появится отдельной иконкой.'
+          : 'Откройте меню браузера и выберите <b>«Установить приложение»</b>. Или просто <a href="/app/" style="color:#c3aaff">откройте Лунарио</a> в браузере.');
+      });
+
+      if (isIOS) installBtn.hidden = false;   // Safari кнопку сам не предложит
+    }
+
+    window.addEventListener('appinstalled', function () {
+      if (installBtn) installBtn.hidden = true;
+      if (installHint) installHint.hidden = true;
+      track('pwa_installed');
+    });
+
+    /* ── cookie-баннер ── */
+    try {
+      if (!localStorage.getItem('lunario_cookie_ok')) {
+        var bar = document.getElementById('cookieBar');
+        bar.classList.add('show');
+        document.getElementById('cookieOk').addEventListener('click', function () {
+          try { localStorage.setItem('lunario_cookie_ok', '1'); } catch (e) {}
+          bar.classList.remove('show');
+        });
+      }
+    } catch (e) { /* приватный режим — баннер просто не показываем */ }
+  })();
+  </script>
+
+</body>
+</html>

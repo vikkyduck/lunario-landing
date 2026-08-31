@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Лунарио — заявки</title>
+<meta name="robots" content="noindex,nofollow">
+<style>
+  :root {
+    --ink:#1E1B3A; --ink-2:#2D2A55; --ink-3:#3A3550; --lav:#9B8FC0; --lav-light:#C8C0DF;
+    --lav-pale:#EDE8F5; --gold:#D4A853; --gold-deep:#C4974A; --terra:#C4714E;
+    --sage:#8BA888; --cream:#F4EFE6; --white:#fff; --radius:12px;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Golos Text',-apple-system,'Segoe UI',sans-serif; font-size:15px; color:var(--ink); background:var(--cream); padding:20px 16px 48px; }
+  .wrap { max-width:1180px; margin:0 auto; }
+  h1 { font-family:Georgia,'Lora',serif; font-size:24px; margin-bottom:4px; }
+  .sub { color:var(--ink-3); font-size:13.5px; margin-bottom:20px; }
+  h2 { font-family:Georgia,serif; font-size:18px; margin:26px 0 12px; }
+
+  .ab { display:grid; gap:12px; grid-template-columns:1fr; }
+  @media (min-width:720px){ .ab { grid-template-columns:1fr 1fr; } }
+  .ab-card { background:var(--white); border-radius:var(--radius); padding:16px; }
+  .ab-card h3 { font-size:14px; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-3); display:flex; align-items:center; gap:8px; }
+  .ab-badge { display:inline-flex; align-items:center; justify-content:center; width:26px; height:26px; border-radius:8px; background:var(--ink); color:var(--gold); font-weight:700; }
+  .conv { font-size:30px; font-weight:700; margin:8px 0 2px; }
+  .conv small { font-size:13px; font-weight:400; color:var(--ink-3); }
+  .funnel { margin-top:10px; display:grid; gap:6px; font-size:13.5px; color:var(--ink-3); }
+  .funnel div { display:flex; justify-content:space-between; gap:10px; border-bottom:1px dashed var(--lav-light); padding-bottom:4px; }
+  .funnel b { color:var(--ink); font-variant-numeric:tabular-nums; }
+
+  .toolbar { display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin:6px 0 12px; }
+  .toolbar .spacer { flex:1; }
+  select, .btn { font:inherit; padding:8px 14px; border-radius:10px; border:1.5px solid var(--lav-light); background:var(--white); color:var(--ink); cursor:pointer; }
+  .btn { text-decoration:none; display:inline-flex; align-items:center; gap:6px; transition:transform .15s cubic-bezier(.34,1.56,.64,1); }
+  .btn:active { transform:scale(.95); }
+  .btn-ink { background:var(--ink); border-color:var(--ink); color:var(--cream); }
+
+  .table-wrap { overflow-x:auto; background:var(--white); border-radius:var(--radius); }
+  table { border-collapse:collapse; width:100%; min-width:760px; font-size:14px; }
+  th, td { text-align:left; padding:10px 12px; border-bottom:1px solid var(--lav-pale); vertical-align:top; }
+  th { font-size:12px; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-3); white-space:nowrap; }
+  td.contact { font-weight:600; max-width:220px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  td.interests { max-width:230px; color:var(--ink-3); }
+  .v-tag { display:inline-block; padding:2px 8px; border-radius:6px; font-weight:600; font-size:12.5px; }
+  .v-A { background:var(--lav-pale); color:var(--ink-2); }
+  .v-B { background:#f6ecd7; color:var(--gold-deep); }
+  .status { font:inherit; font-size:13px; border-radius:8px; padding:5px 8px; border:1.5px solid var(--lav-light); background:var(--white); }
+  .status.s-new { border-color:var(--gold); }
+  .status.s-work { border-color:var(--lav); }
+  .status.s-done { border-color:var(--sage); color:var(--ink-3); }
+  .del { border:none; background:none; color:var(--terra); cursor:pointer; font-size:13px; padding:6px; }
+  .muted { color:var(--ink-3); font-size:13px; }
+  .empty, .loading { padding:36px; text-align:center; color:var(--ink-3); }
+  .utm { font-size:12px; color:var(--ink-3); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Лунарио — заявки на ранний доступ</h1>
+  <p class="sub">Админка. Данные не покидают этот сервер; удаление заявки — насовсем (для запросов «удалите мои данные»).</p>
+
+  <h2>А/Б-тест</h2>
+  <div class="ab" id="ab"></div>
+
+  <h2>Заявки</h2>
+  <div class="toolbar">
+    <select id="fStatus">
+      <option value="">Все статусы</option>
+      <option value="new">Новые</option>
+      <option value="work">В работе</option>
+      <option value="done">Закрытые</option>
+    </select>
+    <select id="fVariant">
+      <option value="">Оба варианта</option>
+      <option value="A">Вариант A</option>
+      <option value="B">Вариант B</option>
+    </select>
+    <span class="spacer"></span>
+    <span class="muted" id="count"></span>
+    <a class="btn btn-ink" href="/admin/api/export.csv">Скачать CSV</a>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr>
+        <th>№</th><th>Когда</th><th>Имя</th><th>Контакт</th><th>Интересы</th>
+        <th>Вар.</th><th>UTM</th><th>Рассылка</th><th>Статус</th><th></th>
+      </tr></thead>
+      <tbody id="tbody"><tr><td colspan="10" class="loading">Загружаем…</td></tr></tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+  var LEADS = [], STATS = null;
+  var STATUS_LABELS = { new:'Новая', work:'В работе', done:'Закрыта' };
+
+  function fmtDate(iso){
+    try { var d = new Date(iso);
+      return d.toLocaleDateString('ru-RU',{day:'2-digit',month:'2-digit'}) + ' ' +
+             d.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'});
+    } catch(e){ return iso; }
+  }
+  function esc(s){ var d=document.createElement('div'); d.textContent = s==null?'':String(s); return d.innerHTML; }
+
+  function renderStats(){
+    var el = document.getElementById('ab');
+    el.innerHTML = ['A','B'].map(function(v){
+      var s = STATS[v];
+      return '<div class="ab-card"><h3><span class="ab-badge">'+v+'</span>'+
+        (v==='A' ? 'Эмоциональный заголовок' : 'Рациональный заголовок')+'</h3>'+
+        '<p class="conv">'+s.conversion+'% <small>посетитель → заявка</small></p>'+
+        '<div class="funnel">'+
+        '<div><span>Просмотры</span><b>'+s.landing_view+'</b></div>'+
+        '<div><span>Клики по кнопкам</span><b>'+s.cta_click+'</b></div>'+
+        '<div><span>Начали форму</span><b>'+s.form_start+'</b></div>'+
+        '<div><span>Заявки</span><b>'+s.leads+'</b></div>'+
+        '</div></div>';
+    }).join('');
+  }
+
+  function renderTable(){
+    var fs = document.getElementById('fStatus').value;
+    var fv = document.getElementById('fVariant').value;
+    var rows = LEADS.filter(function(l){
+      return (!fs || l.status===fs) && (!fv || l.variant===fv);
+    });
+    document.getElementById('count').textContent = rows.length + ' из ' + LEADS.length;
+    var tb = document.getElementById('tbody');
+    if (!rows.length){
+      tb.innerHTML = '<tr><td colspan="10" class="empty">' +
+        (LEADS.length ? 'Под фильтр ничего не попало' : 'Заявок пока нет — они появятся здесь после запуска') + '</td></tr>';
+      return;
+    }
+    tb.innerHTML = rows.map(function(l){
+      var utm = [l.utm_source,l.utm_medium,l.utm_campaign].filter(Boolean).join(' / ');
+      return '<tr>'+
+        '<td>'+l.id+'</td>'+
+        '<td class="muted">'+fmtDate(l.ts)+'</td>'+
+        '<td>'+esc(l.name||'—')+'</td>'+
+        '<td class="contact" title="'+esc(l.contact)+'">'+esc(l.contact)+'</td>'+
+        '<td class="interests">'+esc(l.interests||'—')+'</td>'+
+        '<td><span class="v-tag v-'+l.variant+'">'+l.variant+'</span></td>'+
+        '<td class="utm">'+esc(utm||'—')+'</td>'+
+        '<td class="muted">'+(l.consent_ads ? 'да' : '—')+'</td>'+
+        '<td><select class="status s-'+l.status+'" data-id="'+l.id+'">'+
+          Object.keys(STATUS_LABELS).map(function(s){
+            return '<option value="'+s+'"'+(s===l.status?' selected':'')+'>'+STATUS_LABELS[s]+'</option>';
+          }).join('')+'</select></td>'+
+        '<td><button class="del" data-id="'+l.id+'" title="Удалить насовсем">Удалить</button></td>'+
+      '</tr>';
+    }).join('');
+  }
+
+  function load(){
+    fetch('/admin/api/leads').then(function(r){ return r.json(); }).then(function(j){
+      LEADS = j.leads; STATS = j.stats;
+      renderStats(); renderTable();
+    }).catch(function(){
+      document.getElementById('tbody').innerHTML = '<tr><td colspan="10" class="empty">Не удалось загрузить. <button class="btn" id="retryBtn">Повторить</button></td></tr>';
+      document.getElementById('retryBtn').addEventListener('click', load);
+    });
+  }
+
+  document.getElementById('fStatus').addEventListener('change', renderTable);
+  document.getElementById('fVariant').addEventListener('change', renderTable);
+
+  document.addEventListener('change', function(e){
+    if (!e.target.classList.contains('status')) return;
+    var id = e.target.getAttribute('data-id');
+    fetch('/admin/api/lead', { method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ id:Number(id), status:e.target.value }) }).then(load);
+  });
+  document.addEventListener('click', function(e){
+    if (!e.target.classList.contains('del')) return;
+    var id = e.target.getAttribute('data-id');
+    if (!confirm('Удалить заявку №'+id+' безвозвратно? Это действие для исполнения запроса на удаление данных.')) return;
+    fetch('/admin/api/lead', { method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ id:Number(id), action:'delete' }) }).then(load);
+  });
+
+  load();
+})();
+</script>
+</body>
+</html>

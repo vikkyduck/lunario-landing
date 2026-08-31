@@ -1,0 +1,21 @@
+[Unit]
+Description=Lunario landing: A/B + leads API (lunario.online)
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/lunario/backend
+EnvironmentFile=/opt/lunario/.env
+ExecStart=/usr/bin/node /opt/lunario/backend/server.mjs
+Restart=always
+RestartSec=3
+User=www-data
+Group=www-data
+# База и WAL-файлы — только в data/
+ReadWritePaths=/opt/lunario/data
+ProtectSystem=full
+PrivateTmp=true
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target
