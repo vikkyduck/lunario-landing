@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-label="Лунарио — луна и звёзды">
+  <defs>
+    <radialGradient id="lunMoon" cx="38%" cy="34%" r="78%">
+      <stop offset="0" stop-color="#f8ecc8"/>
+      <stop offset=".55" stop-color="#ecd28d"/>
+      <stop offset="1" stop-color="#c9a24b"/>
+    </radialGradient>
+    <radialGradient id="lunGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#e9c77e" stop-opacity=".38"/>
+      <stop offset=".6" stop-color="#e9c77e" stop-opacity=".12"/>
+      <stop offset="1" stop-color="#e9c77e" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <!-- мягкое свечение -->
+  <circle cx="56" cy="60" r="52" fill="url(#lunGlow)"/>
+  <!-- луна: полный мягкий диск с лёгкой ночной тенью -->
+  <circle cx="56" cy="60" r="30" fill="url(#lunMoon)"/>
+  <circle cx="56" cy="60" r="30" fill="#2a2350" opacity=".12" clip-path="none"/>
+  <path d="M70 33a30 30 0 0 1 0 54 30 30 0 0 0 0-54Z" fill="#241d47" opacity=".18"/>
+  <!-- кратеры: едва заметные -->
+  <g fill="#a8834a" opacity=".16">
+    <circle cx="46" cy="52" r="5.2"/>
+    <circle cx="60" cy="70" r="3.6"/>
+    <circle cx="50" cy="72" r="2.4"/>
+  </g>
+  <!-- мягкая дуга звёзд рядом -->
+  <path d="M88 30 Q102 46 96 68" fill="none" stroke="#e9c77e" stroke-width="1" stroke-linecap="round" opacity=".35"/>
+  <g fill="#f6e3b0">
+    <circle cx="88" cy="30" r="3"/>
+    <circle cx="97" cy="46" r="2.2"/>
+    <circle cx="96" cy="68" r="2.6"/>
+  </g>
+  <g fill="#e9c77e" opacity=".5">
+    <circle cx="22" cy="26" r="1.4"/>
+    <circle cx="16" cy="84" r="1.2"/>
+    <circle cx="104" cy="94" r="1.3"/>
+  </g>
+</svg>

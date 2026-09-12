@@ -5,7 +5,7 @@
 
    Зона приложения (/app/) обслуживается собственным SW — сюда не лезем:
    у него более узкая зона, поэтому там он и остаётся главным. */
-const CACHE = 'lunario-site-v1';
+const CACHE = 'lunario-site-v2';
 
 self.addEventListener('install', () => self.skipWaiting());
 

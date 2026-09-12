@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Лунарио — иконка приложения">
+  <defs>
+    <radialGradient id="moon" cx="38%" cy="34%" r="78%">
+      <stop offset="0" stop-color="#f8ecc8"/>
+      <stop offset=".55" stop-color="#ecd28d"/>
+      <stop offset="1" stop-color="#c9a24b"/>
+    </radialGradient>
+    <linearGradient id="night" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1d1738"/>
+      <stop offset="1" stop-color="#0b0a14"/>
+    </linearGradient>
+    <radialGradient id="halo" cx="50%" cy="52%" r="52%">
+      <stop offset="0" stop-color="#e9c77e" stop-opacity=".30"/>
+      <stop offset=".55" stop-color="#e9c77e" stop-opacity=".10"/>
+      <stop offset="1" stop-color="#e9c77e" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="512" height="512" rx="116" fill="url(#night)"/>
+  <circle cx="248" cy="264" r="232" fill="url(#halo)"/>
+  <!-- мягкая луна -->
+  <circle cx="248" cy="264" r="126" fill="url(#moon)"/>
+  <path d="M308 154a126 126 0 0 1 0 220 126 126 0 0 0 0-220Z" fill="#241d47" opacity=".16"/>
+  <g fill="#a8834a" opacity=".15">
+    <circle cx="206" cy="232" r="22"/>
+    <circle cx="262" cy="310" r="15"/>
+    <circle cx="216" cy="316" r="10"/>
+  </g>
+  <!-- дуга звёзд -->
+  <path d="M382 138 Q438 200 424 292" fill="none" stroke="#e9c77e" stroke-width="4" stroke-linecap="round" opacity=".35"/>
+  <g fill="#f6e3b0">
+    <circle cx="382" cy="138" r="13"/>
+    <circle cx="424" cy="206" r="9"/>
+    <circle cx="424" cy="292" r="11"/>
+  </g>
+  <g fill="#e9c77e" opacity=".45">
+    <circle cx="104" cy="118" r="6"/>
+    <circle cx="82" cy="388" r="5"/>
+    <circle cx="430" cy="404" r="5.5"/>
+    <circle cx="170" cy="74" r="4"/>
+  </g>
+</svg>

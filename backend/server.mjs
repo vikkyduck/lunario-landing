@@ -89,11 +89,10 @@ function metaSet(k, v) {
   db.prepare('INSERT INTO meta (k, v) VALUES (?, ?) ON CONFLICT(k) DO UPDATE SET v = excluded.v').run(k, String(v));
 }
 
-/* ── шаблоны вариантов ── */
-const VARIANTS = {
-  A: { h1: 'Когда внутри слишком много вопросов — найдите опору в себе' },
-  B: { h1: 'Личный AI-компаньон для спокойных и уверенных решений' },
-};
+/* ── варианты А/Б ──
+   Заголовки вариантов из вёрстки убраны (с 10.08 на странице один H1),
+   но метка варианта по-прежнему пишется в события — механика cookie сохранена. */
+const VARIANTS = { A: {}, B: {} };
 const metrikaHead = METRIKA_ID
   ? `<script>(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,"script","https://mc.yandex.ru/metrika/tag.js","ym");ym(${METRIKA_ID},"init",{clickmap:true,trackLinks:true,accurateTrackBounce:true});</script><noscript><div><img src="https://mc.yandex.ru/watch/${METRIKA_ID}" style="position:absolute;left:-9999px" alt=""></div></noscript>`
   : '';
@@ -103,7 +102,6 @@ function buildPages() {
   for (const v of ['A', 'B']) {
     pageCache[v] = tpl
       .replaceAll('{{VARIANT}}', v)
-      .replaceAll('{{H1}}', VARIANTS[v].h1)
       .replaceAll('{{METRIKA_ID_JSON}}', METRIKA_ID ? METRIKA_ID : 'null')
       .replaceAll('{{METRIKA_HEAD}}', metrikaHead);
   }
@@ -187,7 +185,7 @@ async function tgNotify(text) {
 const MIME = {
   '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8',
   '.js': 'text/javascript; charset=utf-8', '.svg': 'image/svg+xml',
-  '.woff2': 'font/woff2', '.png': 'image/png', '.jpg': 'image/jpeg', '.txt': 'text/plain; charset=utf-8',
+  '.woff2': 'font/woff2', '.png': 'image/png', '.ico': 'image/x-icon', '.jpg': 'image/jpeg', '.txt': 'text/plain; charset=utf-8',
 };
 function serveStatic(res, relPath, cacheSec = 86400) {
   const safe = normalize(relPath).replace(/^(\.\.[/\\])+/, '');
@@ -380,7 +378,9 @@ const server = http.createServer(async (req, res) => {
     }
 
     // Интерактивный прототип приложения (переехал с withoutwater.ru 16.08)
-    if (url.pathname === '/prototype' || url.pathname === '/prototype/') return serveStatic(res, 'prototype.html', 300);
+    // старый интерактивный прототип (кремовая ДС v1, до редизайна) с отдачи снят 12.09.2026 — файл остаётся в репозитории
+    if (url.pathname === '/prototype' || url.pathname === '/prototype/' || url.pathname === '/prototype.html') { res.writeHead(410, { 'Content-Type': 'text/plain; charset=utf-8' }); return res.end('Страница больше не доступна'); }
+    if (url.pathname === '/chto-vnutri' || url.pathname === '/chto-vnutri/') return serveStatic(res, 'chto-vnutri.html');
     if (url.pathname === '/politika') return serveStatic(res, 'politika.html');
     if (url.pathname === '/soglasie') return serveStatic(res, 'soglasie.html');
     // service worker лендинга: без кэша, иначе правки доедут до людей с задержкой
@@ -389,7 +389,7 @@ const server = http.createServer(async (req, res) => {
       res.writeHead(200, { 'Content-Type': 'text/plain; charset=utf-8' });
       return res.end(`User-agent: *\nAllow: /\nDisallow: /admin\nSitemap: ${PUBLIC_BASE}/sitemap.xml\n`);
     }
-    if (req.method === 'GET' && !url.pathname.includes('..')) return serveStatic(res, url.pathname);
+    if ((req.method === 'GET' || req.method === 'HEAD') && !url.pathname.includes('..')) return serveStatic(res, url.pathname);
 
     res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
     res.end('Не найдено');

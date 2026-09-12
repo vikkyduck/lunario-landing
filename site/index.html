@@ -3,346 +3,340 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Лунарио — пространство для понимания себя</title>
-  <meta name="description" content="Лунарио — персональное пространство для понимания себя: карта дня, ответы на вопросы, разборы по дате рождения, дневник и практики.">
+  <title>Lunario — пространство, где можно услышать себя</title>
+  <meta name="description" content="Lunario — пространство, где можно услышать себя.">
   <link rel="canonical" href="https://lunario.online/">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://lunario.online/">
-  <meta property="og:title" content="Лунарио — пространство для понимания себя">
-  <meta property="og:description" content="Карта дня, ответы на вопросы, разборы по дате рождения и дневник — в одном приложении. Открыть можно прямо в браузере, бесплатно.">
+  <meta property="og:title" content="Lunario — пространство, где можно услышать себя">
+  <meta property="og:description" content="Пространство, где можно услышать себя.">
   <meta property="og:locale" content="ru_RU">
-  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <meta property="og:image" content="https://lunario.online/assets/og.png?v=1">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://lunario.online/assets/og.png?v=1">
+  <!-- знак бренда во вкладке: svg для современных браузеров, png — для остальных мест (история, закладки, панель задач) -->
+  <link rel="icon" href="/assets/favicon.svg?v=3" type="image/svg+xml">
+  <link rel="icon" href="/assets/favicon-32.png?v=3" sizes="32x32" type="image/png">
+  <link rel="icon" href="/assets/favicon-16.png?v=3" sizes="16x16" type="image/png">
+  <link rel="icon" href="/assets/favicon-48.png?v=3" sizes="48x48" type="image/png">
   <!-- манифест приложения: позволяет установить Лунарио прямо с лендинга -->
   <link rel="manifest" href="/app/manifest.webmanifest">
-  <link rel="apple-touch-icon" href="/app/assets/icon-192.png">
-  <meta name="theme-color" content="#070510">
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png?v=3">
+  <meta name="theme-color" content="#0b0a14">
   <meta name="apple-mobile-web-app-title" content="Лунарио">
-  <link rel="preload" href="/assets/fonts/inter-var-cyrillic.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/fonts/comfortaa-300-700-cyrillic.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/fonts/onest-400-cyrillic.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/assets/css/fonts.css?v=3">
   <script>window.LUNARIO = { variant: '{{VARIANT}}', metrika: {{METRIKA_ID_JSON}} };</script>
   {{METRIKA_HEAD}}
   <style>
-    @font-face{
-      font-family:'Inter';font-style:normal;font-weight:400 800;font-display:swap;
-      src:url('/assets/fonts/inter-var-cyrillic.woff2') format('woff2');
-      unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;
-    }
-    @font-face{
-      font-family:'Inter';font-style:normal;font-weight:400 800;font-display:swap;
-      src:url('/assets/fonts/inter-var-latin.woff2') format('woff2');
-      unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
-    }
-    :root{
-      --bg:#070510;
-      --bg-2:#0d0820;
-      --violet:#7c4dff;
-      --violet-2:#b07cff;
-      --blue:#7aa7ff;
-      --text:#f8f6ff;
-      --muted:#bdb6d7;
-      --line:rgba(255,255,255,.10);
-      --card:rgba(255,255,255,.055);
-      --card-2:rgba(255,255,255,.085);
-      --gold:#e8d8a8;
-      --shadow:0 20px 80px rgba(73,34,152,.28);
-    }
-    *{box-sizing:border-box}
-    [hidden]{display:none!important}
-    html{scroll-behavior:smooth}
-    body{
-      margin:0;
-      font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background:
-        radial-gradient(circle at 20% 10%, rgba(102,56,255,.22), transparent 32%),
-        radial-gradient(circle at 85% 18%, rgba(58,90,255,.15), transparent 26%),
-        linear-gradient(180deg,var(--bg) 0%,#0b0717 58%,#070510 100%);
-      color:var(--text);
-      overflow-x:hidden;
-    }
-    body:before{
-      content:"";
-      position:fixed; inset:0;
-      pointer-events:none; z-index:-2;
-      background-image:
-        radial-gradient(circle, rgba(255,255,255,.92) 0 1px, transparent 1.4px),
-        radial-gradient(circle, rgba(176,124,255,.7) 0 1px, transparent 1.3px);
-      background-size:88px 88px, 137px 137px;
-      background-position:12px 20px, 70px 50px;
-      opacity:.26;
-    }
-    a{text-decoration:none;color:inherit}
-    .container{width:min(1180px,calc(100% - 40px));margin:0 auto}
-    .nav{
-      position:sticky; top:0; z-index:50;
-      backdrop-filter:blur(18px);
-      background:rgba(7,5,16,.62);
-      border-bottom:1px solid rgba(255,255,255,.06);
-    }
-    .nav-inner{
-      height:76px; display:flex; align-items:center; justify-content:space-between; gap:24px;
-    }
-    .brand{display:flex;align-items:center;gap:12px;font-weight:800;letter-spacing:.08em}
-    .brand-mark{
-      width:34px;height:34px;border:1px solid rgba(255,255,255,.45);border-radius:50%;
-      box-shadow:0 0 30px rgba(124,77,255,.45) inset,0 0 30px rgba(124,77,255,.25);
-      position:relative;
-    }
-    .brand-mark:after{
-      content:"✦"; position:absolute; inset:0; display:grid; place-items:center; font-size:13px;
-    }
-    .nav-links{display:flex;gap:24px;color:#d8d2eb;font-size:14px}
-    .button{
-      display:inline-flex;align-items:center;justify-content:center;gap:10px;
-      min-height:52px;padding:0 24px;border-radius:999px;
-      border:1px solid rgba(255,255,255,.14);
-      background:linear-gradient(135deg,#8d5cff,#5a36ff);
-      box-shadow:0 12px 40px rgba(94,55,255,.28);
-      font-weight:750;transition:.25s ease;
-      color:var(--text);font-family:inherit;font-size:16px;cursor:pointer;
-    }
-    .button:hover{transform:translateY(-2px);box-shadow:0 16px 50px rgba(94,55,255,.38)}
-    .button:active{transform:scale(.96);transition:transform .12s cubic-bezier(.34,1.56,.64,1)}
-    .button:disabled{opacity:.6;cursor:default;transform:none}
-    .button.secondary{background:rgba(255,255,255,.06);box-shadow:none}
-    .button.small{min-height:42px;padding:0 18px;font-size:14px}
-    .hero{
-      display:flex;flex-direction:column;align-items:center;text-align:center;
-      padding:120px 0 104px;
-    }
-    .hero-mark{margin-bottom:32px;line-height:0;filter:drop-shadow(0 0 40px rgba(124,77,255,.45))}
-    .eyebrow{
-      color:#cdbbff; text-transform:uppercase; letter-spacing:.18em; font-size:12px; font-weight:800;
-      margin-bottom:18px;
-    }
-    h1{
-      font-family:Georgia, "Times New Roman", serif;
-      font-size:clamp(56px,8vw,104px); line-height:1; letter-spacing:-.02em;
-      margin:0 0 22px;
-    }
-    h2{
-      font-family:Georgia, "Times New Roman", serif;
-      font-size:clamp(36px,4.4vw,62px); line-height:1.02; letter-spacing:-.035em;
-      margin:0 0 18px;
-    }
-    h3{font-size:22px;margin:0 0 10px}
-    p{color:var(--muted);line-height:1.72;font-size:17px}
-    .hero-sub{max-width:620px;margin:0;font-size:19px;line-height:1.65}
-    .hero-actions{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:38px}
-    .install-hint{margin:18px 0 0;font-size:14.5px;color:#c9c1e4;max-width:520px}
-    .install-hint b{color:#efe9ff;font-weight:600}
-    .trust{display:flex;gap:20px;flex-wrap:wrap;justify-content:center;margin-top:32px;color:#d9d2ed;font-size:13px}
-    .trust span:before{content:"✦";color:#9f79ff;margin-right:8px}
-    .shots{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;max-width:940px;margin:0 auto}
-    .shots figure{margin:0}
-    .shots img{
-      width:100%;height:auto;display:block;border-radius:24px;
-      border:1px solid rgba(255,255,255,.12);
-      box-shadow:0 30px 80px rgba(20,8,56,.6);
-    }
-    .shots figcaption{margin-top:16px;font-size:14px;line-height:1.5;color:var(--muted);text-align:center}
-    .section{padding:110px 0;position:relative}
-    .section-head{max-width:760px;margin-bottom:46px}
-    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-    .card{
-      padding:28px;border-radius:26px;background:var(--card);
-      border:1px solid var(--line);box-shadow:var(--shadow);
-      min-height:210px;
-    }
-    .card .icon{font-size:25px;margin-bottom:26px;color:#bca3ff}
-    .card p{font-size:15px;margin-bottom:0}
-    .glass{
-      background:linear-gradient(180deg,rgba(255,255,255,.075),rgba(255,255,255,.035));
-      border:1px solid rgba(255,255,255,.09);
-    }
-    .quote{
-      font-family:Georgia,serif;font-size:clamp(30px,4vw,52px);line-height:1.15;
-      color:#fff;max-width:940px;margin:0;
-    }
-    .quote span{color:#b99cff}
-    .center{text-align:center}
-    .center .section-head{margin-left:auto;margin-right:auto}
-    .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:40px}
-    .step{padding-top:22px;border-top:1px solid var(--line)}
-    .step h3{margin-bottom:8px}
-    .step-num{font-family:Georgia,serif;font-size:38px;color:#8b66ff;margin-bottom:14px;line-height:1}
-    .final{
-      text-align:center;padding:145px 0 120px;
-      background:
-        radial-gradient(circle at 50% 30%,rgba(122,78,255,.28),transparent 28%),
-        linear-gradient(180deg,transparent,rgba(100,53,255,.08));
-    }
-    .planet{
-      width:120px;height:120px;border-radius:50%;margin:0 auto 34px;
-      background:radial-gradient(circle at 35% 32%,#faf7ff 0 7%,#c5b3ff 18%,#6d45df 46%,#21133f 75%);
-      box-shadow:0 0 80px rgba(126,82,255,.55);
-    }
-    footer{padding:34px 0;border-top:1px solid var(--line);color:#958cab;font-size:13px}
-    .footer-inner{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap}
-    footer a:hover{color:#d6cef0}
-    .cookie{
-      position:fixed;left:16px;right:16px;bottom:16px;z-index:90;
-      display:none;gap:16px;align-items:center;flex-wrap:wrap;justify-content:space-between;
-      max-width:820px;margin:0 auto;padding:16px 20px;border-radius:20px;
-      background:rgba(13,8,32,.92);backdrop-filter:blur(18px);
-      border:1px solid rgba(255,255,255,.12);box-shadow:0 20px 60px rgba(10,4,30,.6);
-    }
-    .cookie.show{display:flex}
-    .cookie p{margin:0;font-size:13.5px;color:#cdc6e4;flex:1 1 320px;line-height:1.5}
-    @media(max-width:920px){
-      .nav-links{display:none}
-      .hero{padding:84px 0 72px}
-      .grid,.steps{grid-template-columns:1fr 1fr}
-    }
-    @media(max-width:620px){
-      .container{width:min(100% - 40px,1180px)}
-      .nav-inner{height:66px}
-      .nav .button{display:none}
-      .hero{padding:64px 0 56px}
-      .hero-sub{font-size:17px}
-      .hero-actions{width:100%;flex-direction:column;gap:10px}
-      .hero-actions .button{width:100%}
-      .section{padding:78px 0}
-      .grid,.steps{grid-template-columns:1fr}
-      .shots{
-        display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;
-        margin:0 -20px;padding:0 20px 6px;-webkit-overflow-scrolling:touch;
-      }
-      .shots figure{flex:0 0 74%;scroll-snap-align:center}
-    }
-    @media(prefers-reduced-motion:reduce){
-      *{animation-duration:.01ms!important;transition-duration:.01ms!important}
-      html{scroll-behavior:auto}
-    }
+  :root{
+    --bg-0:#0b0a14; --bg-1:#141126; --bg-2:#1d1738;
+    --text:#f5f2ea; --muted:#b9b2cf;
+    --gold:#d9b868; --gold-2:#f0d79a;
+  }
+  *{box-sizing:border-box}
+  [hidden]{display:none!important}
+  html,body{height:100%}
+  body{
+    margin:0;
+    font-family:"Onest", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    color:var(--text);
+    background:linear-gradient(180deg, var(--bg-1) 0%, var(--bg-0) 70%);
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;text-decoration:none}
+
+  /* ---------- фон ---------- */
+  .bg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+  .orb{position:absolute;border-radius:50%;filter:blur(90px);opacity:.55}
+  .orb-1{width:56vw;height:56vw;max-width:760px;max-height:760px;top:-22vw;left:50%;transform:translateX(-50%);
+    background:radial-gradient(circle, #6d5bd0 0%, transparent 65%);animation:drift 22s ease-in-out infinite}
+  .orb-2{width:34vw;height:34vw;max-width:460px;max-height:460px;bottom:-12vw;right:-8vw;
+    background:radial-gradient(circle, rgba(217,184,104,.5) 0%, transparent 65%);animation:drift 26s ease-in-out infinite reverse}
+  /* ночные облака: тон (яркость) медленно дышит, цвет не меняется */
+  .cloud{position:absolute;border-radius:50%;filter:blur(110px);opacity:.22;
+    animation:cloudtone 64s ease-in-out infinite;will-change:opacity,transform}
+  .cloud-1{width:70vw;height:26vw;top:6%;left:-18vw;
+    background:radial-gradient(ellipse, rgba(141,130,190,.5) 0%, transparent 68%)}
+  .cloud-2{width:60vw;height:22vw;bottom:2%;right:-20vw;animation-delay:-31s;
+    background:radial-gradient(ellipse, rgba(120,132,190,.42) 0%, transparent 68%)}
+  .sky{position:absolute;inset:0;width:100%;height:100%;display:block;opacity:0;
+    transition:opacity 2.4s ease}
+  .sky.on{opacity:1}
+
+  /* ---------- сцена ---------- */
+  .stage{
+    position:relative;z-index:2;
+    min-height:100svh;min-height:100dvh;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    text-align:center;padding:64px 24px 150px;
+  }
+  /* мягкий скрим: успокаивает фон под текстом, границы не видно */
+  .stage::before{
+    content:"";position:absolute;z-index:-1;pointer-events:none;
+    left:50%;top:50%;transform:translate(-50%,-50%);
+    width:min(1100px,120%);height:min(760px,95%);
+    background:radial-gradient(ellipse at center, rgba(11,10,20,.62) 0%, rgba(11,10,20,.42) 45%, rgba(11,10,20,0) 75%);
+  }
+  .mark{position:relative;line-height:0;margin-bottom:30px;
+    animation:float 8s ease-in-out infinite;
+    filter:drop-shadow(0 8px 40px rgba(217,184,104,.28));
+    transition:transform .5s cubic-bezier(.34,1.56,.64,1);
+    will-change:transform;
+  }
+  .mark:hover{transform:scale(1.05)}
+  .moon-img{width:104px;height:104px;display:block;
+    animation:moonbreathe 7s ease-in-out infinite;
+    /* лёгкий параллакс за курсором задаётся из JS (--tx/--ty) */
+    transform:translate(var(--tx,0px),var(--ty,0px));
+    transition:transform .6s cubic-bezier(.22,1,.36,1);
+  }
+  /* дыхание: стекло медленно наливается светом */
+  @keyframes moonbreathe{
+    0%,100%{filter:brightness(1) saturate(1);opacity:.92}
+    50%{filter:brightness(1.18) saturate(1.12);opacity:1}
+  }
+  /* дофаминовые искры вокруг луны */
+  .spark{position:absolute;width:5px;height:5px;border-radius:50%;
+    background:radial-gradient(circle,#fff8e6 0%,rgba(244,223,168,.7) 45%,transparent 70%);
+    opacity:0;pointer-events:none;
+  }
+  .spark.s1{top:6%;right:10%;animation:sparkle 4.6s ease-in-out infinite}
+  .spark.s2{bottom:14%;left:4%;animation:sparkle 5.8s ease-in-out 1.9s infinite}
+  .spark.s3{top:38%;right:-4%;animation:sparkle 6.7s ease-in-out 3.4s infinite}
+  @keyframes sparkle{
+    0%,100%{opacity:0;transform:scale(.4)}
+    8%{opacity:1;transform:scale(1.25)}
+    22%{opacity:0;transform:scale(.5)}
+  }
+  .wordmark{
+    margin:0;font-family:"Comfortaa", ui-rounded, "Onest", system-ui, sans-serif;
+    font-size:clamp(46px,7.2vw,86px);font-weight:300;
+    letter-spacing:.01em;line-height:1.14;
+    text-shadow:0 2px 24px rgba(11,10,20,.55);
+  }
+  .tagline{
+    margin:20px 0 0;font-size:clamp(17px,2vw,21px);font-weight:500;
+    color:#f5f2ea;max-width:30em;line-height:1.6;letter-spacing:.005em;
+    text-shadow:0 1px 12px rgba(11,10,20,.7);
+  }
+
+  /* ---------- CTA ---------- */
+  .cta{margin-top:52px;display:flex;flex-direction:column;align-items:center;gap:14px;width:min(360px,100%)}
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:10px;
+    width:100%;min-height:62px;padding:0 28px;border-radius:999px;
+    font:inherit;font-size:17px;font-weight:600;letter-spacing:.01em;
+    cursor:pointer;transition:transform .2s ease, box-shadow .2s ease, background .2s ease;
+  }
+  .btn-primary{
+    border:0;color:#1c1430;
+    background:linear-gradient(135deg, var(--gold-2) 0%, var(--gold) 55%, #b98f3e 100%);
+    box-shadow:0 12px 40px -8px rgba(217,184,104,.45);
+  }
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 18px 48px -8px rgba(217,184,104,.55)}
+  .btn-primary:active{transform:scale(.98)}
+  .btn-ghost{
+    border:1px solid rgba(245,242,234,.25);background:rgba(245,242,234,.04);
+    color:var(--text);
+  }
+  .btn-ghost:hover{background:rgba(245,242,234,.1);border-color:rgba(245,242,234,.45)}
+  .btn-ghost:active{transform:scale(.98)}
+  .btn:focus-visible,.foot a:focus-visible,.btn-cookie:focus-visible,.store:focus-visible{
+    outline:2px solid var(--gold-2);outline-offset:3px;
+  }
+  .install-hint{margin:22px auto 0;max-width:520px;font-size:15.5px;line-height:1.65;color:#ded8ee;text-shadow:0 1px 10px rgba(11,10,20,.6)}
+  .install-hint b{color:var(--gold-2);font-weight:600}
+  .install-hint a{color:var(--gold-2)}
+
+  /* ---------- кнопки скачивания (liquid glass) ---------- */
+  .stores{
+    margin:56px 0 0;display:flex;flex-wrap:wrap;gap:14px;justify-content:center;
+    width:min(720px,100%);
+  }
+  .glass{
+    position:relative;isolation:isolate;overflow:hidden;
+    border-radius:20px;
+    background:linear-gradient(135deg, rgba(245,242,234,.10) 0%, rgba(245,242,234,.04) 45%, rgba(245,242,234,.07) 100%);
+    backdrop-filter:blur(22px) saturate(160%) brightness(1.08);
+    border:1px solid transparent;
+    background-clip:padding-box;
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.22),
+      inset 0 -1px 0 rgba(0,0,0,.18),
+      0 12px 34px -14px rgba(0,0,0,.55);
+    --mx:50%; --my:0%; --edge:0;
+    transition:transform .25s cubic-bezier(.34,1.56,.64,1), box-shadow .3s ease;
+    will-change:transform;
+  }
+  /* стеклянная кромка: свет «ломается» по краю */
+  .glass::before{
+    content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;z-index:0;
+    background:
+      conic-gradient(from calc(var(--edge) * 1deg) at var(--mx) var(--my),
+        rgba(255,255,255,.75) 0deg,
+        rgba(244,223,168,.55) 40deg,
+        rgba(255,255,255,.08) 110deg,
+        rgba(255,255,255,.05) 220deg,
+        rgba(244,223,168,.35) 300deg,
+        rgba(255,255,255,.75) 360deg);
+    -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite:xor;
+    mask-composite:exclude;
+    pointer-events:none;
+  }
+  /* блик, «ловящий» курсор */
+  .glass::after{
+    content:"";position:absolute;inset:-40%;border-radius:inherit;z-index:0;pointer-events:none;
+    background:radial-gradient(circle at var(--mx) var(--my),
+      rgba(255,255,255,.28) 0%,
+      rgba(244,223,168,.14) 18%,
+      transparent 46%);
+    opacity:0;transition:opacity .35s ease;
+  }
+  .glass:hover::after{opacity:1}
+  .glass:hover{
+    transform:translateY(-3px) scale(1.015);
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.3),
+      inset 0 -1px 0 rgba(0,0,0,.18),
+      0 18px 44px -14px rgba(217,184,104,.4);
+  }
+  .glass:active{transform:scale(.97)}
+  .glass > *{position:relative;z-index:1}
+
+  .store{
+    display:inline-flex;align-items:center;gap:12px;
+    flex:1 1 0;min-width:200px;min-height:62px;padding:12px 20px;color:var(--text);
+  }
+  .store-icon{flex:0 0 auto;width:24px;height:24px;color:#f5f2ea}
+  .store-text{display:flex;flex-direction:column;line-height:1.15;text-align:left}
+  .store-text small{font-size:11.5px;color:#d3cde6;letter-spacing:.02em}
+  .store-text b{font-size:15px;font-weight:600;color:var(--text)}
+
+  /* ---------- футер ---------- */
+  .foot{
+    position:relative;z-index:2;padding:0 24px 36px;text-align:center;color:#8f87ad;font-size:13px;
+  }
+  .foot-row{display:flex;gap:26px;flex-wrap:wrap;justify-content:center;margin-bottom:14px;font-size:13.5px;font-weight:500;color:#cfc9e4}
+  .foot-row a{padding:6px 2px;border-bottom:1px solid transparent;transition:.2s}
+  .foot-row a:hover{color:var(--gold-2);border-color:rgba(217,184,104,.5)}
+  .foot-fine{max-width:820px;margin:0 auto;line-height:1.7;font-size:12.5px;color:#9c95b8}
+
+  /* ---------- cookie ---------- */
+  .cookie{
+    position:fixed;left:16px;right:16px;bottom:16px;z-index:90;display:none;
+    gap:16px;align-items:center;flex-wrap:wrap;justify-content:space-between;
+    max-width:720px;margin:0 auto;padding:16px 20px;border-radius:18px;
+    background:rgba(20,17,38,.92);backdrop-filter:blur(18px);
+    border:1px solid rgba(245,242,234,.14);
+    box-shadow:0 20px 60px rgba(0,0,0,.45);
+  }
+  .cookie.show{display:flex}
+  .cookie p{margin:0;flex:1 1 300px;font-size:13.5px;line-height:1.55;color:#cdc6e2}
+  .cookie a{color:var(--gold-2);text-decoration:underline}
+  .btn-cookie{
+    min-height:44px;padding:0 24px;border-radius:999px;border:0;cursor:pointer;
+    background:var(--gold);color:#1c1430;font:inherit;font-size:14.5px;font-weight:600;
+  }
+  .btn-cookie:hover{background:var(--gold-2)}
+
+  @keyframes float{0%,100%{transform:translateY(-6px)}50%{transform:translateY(8px)}}
+  @keyframes drift{0%,100%{transform:translate(-50%,0) scale(1)}50%{transform:translate(-46%,4%) scale(1.06)}}
+  .orb-2{animation-name:drift2}
+  @keyframes drift2{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-4%,-5%) scale(1.08)}}
+  /* облака: только тон (прозрачность/масштаб), цвет статичен — небо медленно «дышит» */
+  @keyframes cloudtone{
+    0%,100%{opacity:.18;transform:translateX(0) scale(1)}
+    50%{opacity:.34;transform:translateX(3%) scale(1.07)}
+  }
+
+  @media(max-width:620px){
+    .stage{padding:48px 20px 130px}
+    .moon-img{width:82px;height:82px}
+    .cta{margin-top:44px}
+    .stores{margin-top:44px}
+  }
+  @media(prefers-reduced-motion:reduce){
+    *{animation:none!important;transition-duration:.01ms!important}
+  }
   </style>
 </head>
 <body>
 
-  <nav class="nav">
-    <div class="container nav-inner">
-      <a class="brand" href="#top"><span class="brand-mark"></span>ЛУНАРИО</a>
-      <div class="nav-links">
-        <a href="#inside">Что внутри</a>
-        <a href="#how">Как это работает</a>
-        <a href="#faq">Вопросы</a>
-      </div>
-      <a class="button small js-app-open" href="/app/">Открыть приложение</a>
+  <div class="bg" aria-hidden="true">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="cloud cloud-1"></div>
+    <div class="cloud cloud-2"></div>
+    <canvas class="sky" id="sky"></canvas>
+  </div>
+
+  <main class="stage" id="top">
+    <div class="mark" id="moonMark" aria-hidden="true">
+      <canvas class="moon-img" id="moonCanvas" width="208" height="208"></canvas>
+      <span class="spark s1"></span><span class="spark s2"></span><span class="spark s3"></span>
     </div>
-  </nav>
 
-  <main id="top">
-    <section class="container hero">
-      <div class="hero-mark" aria-hidden="true">
-        <svg viewBox="0 0 32 32" width="104" height="104" role="img">
-          <path d="M24.5 18.6A9.5 9.5 0 1 1 13.4 7.5a7.9 7.9 0 0 0 11.1 11.1Z" fill="none" stroke="#e8d8a8" stroke-width="1" stroke-linejoin="round"/>
-          <circle cx="23" cy="9" r=".9" fill="#c8c0df"/>
+    <h1 class="wordmark">Лунарио</h1>
+    <p class="tagline">Пространство, где можно услышать себя</p>
+
+    <div class="cta">
+      <button class="btn btn-ghost glass" type="button" id="installBtn" hidden>
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M12 3v12m0 0 3.5-3.5M12 15 8.5 11.5"/><path d="M5 20h14"/></svg>
+        <span>Установить на телефон</span>
+      </button>
+    </div>
+    <p class="install-hint" id="installHint" hidden></p>
+
+    <div class="stores" aria-label="Скачать приложение">
+      <a class="store glass" href="#" aria-label="Скачать в App Store" data-store="ios">
+        <svg class="store-icon" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="currentColor">
+          <path d="M17.05 12.04c-.03-2.6 2.12-3.85 2.22-3.91-1.21-1.77-3.09-2.01-3.76-2.04-1.6-.16-3.12.94-3.93.94-.81 0-2.06-.92-3.39-.89-1.74.03-3.35 1.01-4.25 2.57-1.81 3.14-.46 7.79 1.29 10.34.85 1.25 1.86 2.65 3.18 2.6 1.28-.05 1.76-.82 3.3-.82 1.54 0 1.97.82 3.32.79 1.37-.02 2.24-1.27 3.08-2.53.97-1.45 1.37-2.85 1.39-2.92-.03-.01-2.67-1.02-2.7-4.04zm-2.46-7.42c.7-.85 1.17-2.02 1.04-3.19-1.01.04-2.23.67-2.96 1.52-.65.75-1.22 1.95-1.07 3.09 1.13.09 2.29-.57 2.99-1.42z"/>
         </svg>
-      </div>
-      <h1>Лунарио</h1>
-      <p class="hero-sub">Пространство для понимания себя. Карта дня, ответы на вопросы, дневник и разбор отношений — когда нужно остановиться и услышать себя.</p>
-      <div class="hero-actions">
-        <a class="button js-app-open" href="/app/">Открыть приложение</a>
-        <button class="button secondary" type="button" id="installBtn" hidden>Установить на телефон</button>
-      </div>
-      <p class="install-hint" id="installHint" hidden></p>
-      <div class="trust">
-        <span>Бесплатный старт</span>
-        <span>Без регистрации</span>
-        <span>Данные хранятся в России</span>
-      </div>
-    </section>
-
-    <section class="section" id="screens">
-      <div class="container">
-        <div class="section-head">
-          <div class="eyebrow">Как это выглядит</div>
-          <h2>Три экрана, к которым возвращаются каждый день.</h2>
-        </div>
-        <div class="shots">
-          <figure>
-            <img src="/assets/screens/today.jpg" width="640" height="1385" loading="lazy" decoding="async"
-                 alt="Экран «Сегодня»: карта дня, счётчик дней подряд и выбор настроения">
-            <figcaption>Карта дня и настроение — минута утром</figcaption>
-          </figure>
-          <figure>
-            <img src="/assets/screens/ask.jpg" width="640" height="1385" loading="lazy" decoding="async"
-                 alt="Экран «Спросить»: вопрос «Стоит ли менять работу сейчас?» и ответ с пояснением">
-            <figcaption>Ответ приходит на конкретный вопрос</figcaption>
-          </figure>
-          <figure>
-            <img src="/assets/screens/journal.jpg" width="640" height="1385" loading="lazy" decoding="async"
-                 alt="Экран «Я»: записи дневника и список желаний с напоминаниями">
-            <figcaption>Дневник и желания — видите только вы</figcaption>
-          </figure>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="inside">
-      <div class="container">
-        <div class="section-head">
-          <div class="eyebrow">Что внутри</div>
-          <h2>Один вопрос. Много способов найти свой ответ.</h2>
-        </div>
-        <div class="grid">
-          <article class="card glass"><div class="icon">✦</div><h3>Ответ на вопрос</h3><p>Спросите о том, что занимает мысли: «Да / Нет», руна или расклад на три карты — с пояснением, а не сухим вердиктом.</p></article>
-          <article class="card glass"><div class="icon">◌</div><h3>Персональные разборы</h3><p>Индивидуальные интерпретации и подсказки на основе ваших данных и выбранных методик.</p></article>
-          <article class="card glass"><div class="icon">♡</div><h3>Совместимость</h3><p>Исследуйте отношения с партнёром, друзьями и близкими: притяжение, различия, зоны напряжения.</p></article>
-          <article class="card glass"><div class="icon">☽</div><h3>Прогнозы и периоды</h3><p>Дополнительная точка зрения на текущий жизненный период, перемены и решения.</p></article>
-          <article class="card glass"><div class="icon">✧</div><h3>Практики</h3><p>Небольшие упражнения и вопросы, которые помогают остановиться и вернуться к себе.</p></article>
-          <article class="card glass"><div class="icon">⌁</div><h3>Дневник</h3><p>Сохраняйте мысли, наблюдения и важные моменты, чтобы со временем видеть свои изменения.</p></article>
-        </div>
-      </div>
-    </section>
-
-    
-
-    <section class="section" id="how">
-      <div class="container">
-        <div class="section-head">
-          <div class="eyebrow">Как это работает</div>
-          <h2>От вопроса — к пониманию.</h2>
-        </div>
-        <div class="steps">
-          <article class="step"><div class="step-num">01</div><h3>Расскажите немного о себе</h3><p>Только то, чем готовы поделиться.</p></article>
-          <article class="step"><div class="step-num">02</div><h3>Выберите, что волнует</h3><p>Отношения, состояние, деньги, выбор, перемены или просто разговор.</p></article>
-          <article class="step"><div class="step-num">03</div><h3>Получите разбор и возвращайтесь</h3><p>Лунарио поможет посмотреть на ситуацию глубже. Наблюдения сохраняются — со временем видно, как меняетесь вы.</p></article>
-        </div>
-      </div>
-    </section>
-
-    
-
-    
-
-    <section class="section" id="faq">
-      <div class="container">
-        <div class="section-head">
-          <div class="eyebrow">FAQ</div>
-          <h2>Что ещё важно знать.</h2>
-        </div>
-        <details><summary>Лунарио — это психолог?</summary><p>Нет. Лунарио не заменяет психологическую, медицинскую или иную профессиональную помощь. Это инструмент саморефлексии и исследования себя.</p></details>
-        <details><summary>Это приложение только про астрологию?</summary><p>Нет. Лунарио объединяет несколько подходов: карты, руны, нумерологию, дневник и практики самонаблюдения.</p></details>
-        <details><summary>Что будет бесплатно?</summary><p>Карта дня, ответы на вопросы, руны, нумерология, дневник, желания и отметки настроения — всё это бесплатно и без ограничений. Расширенные разборы появятся в Лунарио+.</p></details>
-        <details><summary>Как начать пользоваться?</summary><p>Нажмите «Открыть приложение» — Лунарио работает прямо в браузере, без установки и регистрации. Аккаунт можно завести позже, чтобы записи сохранились при смене телефона.</p></details>
-        <details><summary>Нужно ли ставить приложение из магазина?</summary><p>Не обязательно. Лунарио можно добавить на экран телефона кнопкой «Установить на телефон» — появится обычная иконка. Версии для магазинов приложений готовятся.</p></details>
-        <details><summary>Что происходит с моими записями?</summary><p>Они хранятся на серверах в России и видны только вам. Историю можно очистить, а аккаунт — удалить вместе со всеми данными в разделе «Данные и приватность».</p></details>
-      </div>
-    </section>
-
-    
+        <span class="store-text"><small>Загрузить в</small><b>App Store</b></span>
+      </a>
+      <a class="store glass" href="#" aria-label="Скачать в Google Play" data-store="android">
+        <svg class="store-icon" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">
+          <path d="M3.6 2.3c-.3.3-.5.7-.5 1.1v17.2c0 .4.2.8.5 1.1l.1.1L13.7 12 3.7 2.2z" fill="#00E676"/>
+          <path d="M17.2 8.5l-3.5 3.5 3.5 3.5 4.6-2.6c1-.6 1-1.8 0-2.3l-4.6-2.1z" fill="#FFC107"/>
+          <path d="M3.7 21.7c.4.2 1.2.2 1.9-.2L17.2 15l-3.5-3.5-10 10.2z" fill="#FF3D00"/>
+          <path d="M3.7 2.3c.4-.2 1.2-.2 1.9.2L17.2 9l-3.5 3.5L3.7 2.3z" fill="#40C4FF"/>
+        </svg>
+        <span class="store-text"><small>Доступно в</small><b>Google Play</b></span>
+      </a>
+      <a class="store glass js-app-open" href="/app/" aria-label="Установить веб-приложение" data-store="web" data-cta="web">
+        <svg class="store-icon" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6">
+          <circle cx="12" cy="12" r="9"/>
+          <path d="M3 12h18"/>
+          <path d="M12 3a14 14 0 0 1 0 18 14 14 0 0 1 0-18Z"/>
+        </svg>
+        <span class="store-text"><small>Установить как</small><b>Веб-приложение</b></span>
+      </a>
+    </div>
   </main>
 
-  <footer>
-    <div class="container footer-inner">
-      <div>© 2026 Лунарио</div>
-      <div><a href="https://www.instagram.com/lunario.online/" target="_blank" rel="noopener">Instagram*</a> · <a href="https://t.me/lunario_oline" target="_blank" rel="noopener">Telegram</a></div>
-      <div><a href="/politika">Политика конфиденциальности</a> · <a href="/soglasie">Пользовательское соглашение</a></div>
-      <div style="flex:1 1 100%;font-size:12px;line-height:1.6;color:#7d7593">* Instagram принадлежит компании Meta, признанной в Российской Федерации экстремистской организацией; её деятельность на территории РФ запрещена.</div>
-    </div>
+  <footer class="foot">
+    <nav class="foot-row" aria-label="Ссылки">
+      <a href="/chto-vnutri">Что внутри</a>
+      <a href="https://t.me/lunario_oline" target="_blank" rel="noopener">Telegram</a>
+      <a href="https://www.instagram.com/lunario.online/" target="_blank" rel="noopener">Instagram*</a>
+      <a href="/politika">Политика конфиденциальности</a>
+      <a href="/soglasie">Соглашение</a>
+    </nav>
+    <p class="foot-fine">
+      ЛУНАРИО 2026 © · Контент носит рекомендательный характер и не заменяет консультации специалистов.
+      * Instagram принадлежит компании Meta, признанной в Российской Федерации экстремистской организацией; её деятельность на территории РФ запрещена.
+    </p>
   </footer>
 
   <div class="cookie" id="cookieBar">
-    <p>Мы используем cookie, чтобы сайт работал корректно и мы понимали, какие материалы полезны. Подробнее — в <a href="/politika" target="_blank" rel="noopener" style="color:#c3aaff;text-decoration:underline">Политике конфиденциальности</a>.</p>
-    <button class="button small" type="button" id="cookieOk">Хорошо</button>
+    <p>Мы используем cookie, чтобы сайт работал корректно. Подробнее — в <a href="/politika" target="_blank" rel="noopener">Политике конфиденциальности</a>.</p>
+    <button class="btn-cookie" type="button" id="cookieOk">Хорошо</button>
   </div>
 
   <script>
@@ -353,7 +347,6 @@
     var METRIKA = (window.LUNARIO && window.LUNARIO.metrika) || null;
     var PREVIEW = /[?&]ab=(A|B)\b/.test(location.search);
 
-    /* ── UTM: берём из URL, храним на сессию ── */
     var UTM_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'];
     var utm = {};
     try {
@@ -366,7 +359,6 @@
       if (Object.keys(utm).length) sessionStorage.setItem('lunario_utm', JSON.stringify(utm));
     } catch (e) { /* приватный режим — работаем без сохранения */ }
 
-    /* ── события ── */
     function track(type, extra) {
       if (PREVIEW) return;
       try {
@@ -389,10 +381,6 @@
       });
     });
 
-    /* ── приложение: открыть и установить ──────────────────────────────
-       Установку предлагает сам браузер — присылает beforeinstallprompt.
-       Мы придерживаем это событие и показываем свою кнопку в первом экране.
-       У Safari такого события нет, поэтому там объясняем словами. */
     var installBtn = document.getElementById('installBtn');
     var installHint = document.getElementById('installHint');
     var deferredPrompt = null;
@@ -438,7 +426,7 @@
         track('pwa_hint');
         hint(isIOS
           ? 'В Safari нажмите <b>«Поделиться»</b> внизу экрана и выберите <b>«На экран „Домой“»</b> — Лунарио появится отдельной иконкой.'
-          : 'Откройте меню браузера и выберите <b>«Установить приложение»</b>. Или просто <a href="/app/" style="color:#c3aaff">откройте Лунарио</a> в браузере.');
+          : 'Откройте меню браузера и выберите <b>«Установить приложение»</b>. Или просто <a href="/app/">откройте Лунарио</a> в браузере.');
       });
 
       if (isIOS) installBtn.hidden = false;   // Safari кнопку сам не предложит
@@ -450,7 +438,21 @@
       track('pwa_installed');
     });
 
-    /* ── cookie-баннер ── */
+    /* liquid glass: блик и преломление кромки следуют за курсором */
+    if (window.matchMedia('(pointer: fine)').matches &&
+        !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      document.querySelectorAll('.glass').forEach(function (el) {
+        el.addEventListener('pointermove', function (e) {
+          var r = el.getBoundingClientRect();
+          var x = e.clientX - r.left, y = e.clientY - r.top;
+          el.style.setProperty('--mx', (x / r.width * 100).toFixed(2) + '%');
+          el.style.setProperty('--my', (y / r.height * 100).toFixed(2) + '%');
+          var ang = Math.atan2(y - r.height / 2, x - r.width / 2) * 180 / Math.PI + 90;
+          el.style.setProperty('--edge', ang.toFixed(1));
+        });
+      });
+    }
+
     try {
       if (!localStorage.getItem('lunario_cookie_ok')) {
         var bar = document.getElementById('cookieBar');
@@ -461,6 +463,369 @@
         });
       }
     } catch (e) { /* приватный режим — баннер просто не показываем */ }
+  })();
+  </script>
+
+  <script>
+  /* тихое живое небо: созвездия дышат, звёзды мерцают, реакция на курсор без мельтешения */
+  (function () {
+    var cv = document.getElementById('sky');
+    if (!cv || !cv.getContext) return;
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var ctx = cv.getContext('2d');
+    var W = 0, H = 0, dpr = 1, stars = [], figs = [], t0 = performance.now();
+    var meteors = [], nextMeteor = 4 + Math.random() * 6;
+    var px = -9999, py = -9999, tx = -9999, ty = -9999, fine = window.matchMedia('(pointer: fine)').matches;
+
+        /* настоящий каталог: RA (часы), Dec (градусы), звёздная величина — яркие звёзды, узнаваемые фигуры */
+    var CATALOG = [
+      { n: 'Большая Медведица', s: [[11.062,61.75,1.8],[11.031,56.38,2.4],[11.897,53.69,2.4],[12.257,57.03,3.3],[12.900,55.96,1.8],[13.399,54.93,2.2],[13.792,49.31,1.9]], e: [[6,5],[5,4],[4,3],[3,2],[2,1],[1,0],[0,3]] },
+      { n: 'Малая Медведица', s: [[2.530,89.26,2.0],[17.537,86.59,4.4],[16.766,82.04,4.2],[15.734,77.79,4.3],[14.845,74.16,2.1],[15.345,71.83,3.0],[16.291,75.76,5.0]], e: [[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,3]] },
+      { n: 'Кассиопея', s: [[0.153,59.15,2.3],[0.675,56.54,2.2],[0.945,60.72,2.5],[1.430,60.24,2.7],[1.907,63.67,3.4]], e: [[0,1],[1,2],[2,3],[3,4]] },
+      { n: 'Цефей', s: [[21.309,62.59,2.5],[21.478,70.56,3.2],[23.655,77.63,3.2],[22.828,66.20,3.5],[22.181,58.20,3.3]], e: [[0,1],[1,2],[2,3],[3,4],[4,0]] },
+      { n: 'Дракон', s: [[17.943,51.49,2.2],[17.507,52.30,2.8],[17.537,55.18,4.9],[17.892,56.87,3.8],[19.209,67.66,3.1],[17.146,65.71,3.2],[16.400,61.51,2.7],[16.032,58.56,4.0],[15.415,58.97,3.3],[14.073,64.38,3.7],[12.558,69.79,3.9],[11.523,69.33,3.8]], e: [[0,1],[1,2],[2,3],[3,0],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9],[9,10],[10,11]] },
+      { n: 'Персей', s: [[3.405,49.86,1.8],[3.136,40.96,2.1],[3.080,53.51,2.9],[3.715,47.79,3.0],[3.964,40.01,2.9],[3.902,31.88,2.8]], e: [[2,0],[0,1],[0,3],[3,4],[4,5]] },
+      { n: 'Возничий', s: [[5.278,46.00,0.1],[5.992,44.95,1.9],[5.995,37.21,2.6],[5.438,28.61,1.6],[4.950,33.17,2.7],[5.033,43.82,3.0]], e: [[0,1],[1,2],[2,3],[3,4],[4,5],[5,0]] },
+      { n: 'Андромеда', s: [[0.140,29.09,2.1],[0.656,30.86,3.3],[1.162,35.62,2.1],[2.065,42.33,2.1],[0.946,38.50,3.9],[0.830,41.08,4.5]], e: [[0,1],[1,2],[2,3],[2,4],[4,5]] },
+      { n: 'Пегас', s: [[23.079,15.21,2.5],[23.063,28.08,2.4],[0.220,15.18,2.8],[0.140,29.09,2.1],[21.736,9.88,2.4],[22.717,30.22,2.9],[22.170,6.20,3.5],[22.691,10.83,3.4]], e: [[0,1],[1,3],[3,2],[2,0],[1,5],[0,7],[7,6],[6,4]] },
+      { n: 'Лебедь', s: [[20.690,45.28,1.2],[20.370,40.26,2.2],[20.770,33.97,2.5],[19.749,45.13,2.9],[19.512,27.96,3.1]], e: [[0,1],[1,4],[1,2],[1,3]] },
+      { n: 'Лира', s: [[18.615,38.78,0.0],[18.746,37.60,4.3],[18.907,36.90,4.2],[18.982,32.69,3.2],[18.834,33.36,3.5]], e: [[0,1],[1,2],[2,3],[3,4],[4,1]] },
+      { n: 'Орёл', s: [[19.846,8.87,0.8],[19.771,10.61,2.7],[19.922,6.41,3.7],[19.425,3.11,3.4],[19.090,13.86,3.0],[20.188,-0.82,3.2],[19.102,-4.88,3.4],[19.874,1.01,3.9]], e: [[1,0],[0,2],[0,3],[3,4],[3,6],[3,7],[7,5]] },
+      { n: 'Геркулес', s: [[16.688,31.60,2.8],[16.715,38.92,3.5],[17.251,36.81,3.2],[17.005,30.93,3.9],[16.504,21.49,2.8],[17.251,24.84,3.1]], e: [[0,1],[1,2],[2,3],[3,0],[0,4],[3,5]] },
+      { n: 'Северная Корона', s: [[15.578,26.71,2.2],[15.464,29.11,3.7],[15.712,26.30,3.8],[15.826,26.07,4.6],[15.959,26.88,4.2],[15.549,31.36,4.1]], e: [[5,1],[1,0],[0,2],[2,3],[3,4]] },
+      { n: 'Волопас', s: [[14.261,19.18,-0.05],[13.911,18.40,2.7],[14.750,27.07,2.4],[15.258,33.31,3.5],[15.032,40.39,3.5],[14.535,38.31,3.0]], e: [[0,1],[0,2],[2,3],[3,4],[4,5],[5,0]] },
+      { n: 'Змееносец', s: [[17.582,12.56,2.1],[17.724,4.57,2.8],[16.961,9.38,3.2],[16.619,-10.57,2.6],[17.173,-15.72,2.4],[16.239,-3.69,2.8],[16.305,-4.69,3.2]], e: [[0,2],[2,5],[5,6],[6,3],[3,4],[4,1],[1,0]] },
+      { n: 'Лев', s: [[10.139,11.97,1.4],[10.122,16.76,3.5],[10.333,19.84,2.0],[10.278,23.42,3.4],[9.879,26.01,3.9],[9.764,23.77,3.0],[11.235,20.52,2.6],[11.818,14.57,2.1],[11.237,15.43,3.3]], e: [[0,1],[1,2],[2,3],[3,4],[4,5],[2,6],[6,7],[7,8],[8,0]] },
+      { n: 'Дева', s: [[13.420,-11.16,1.0],[13.578,-0.60,3.4],[12.694,-1.45,2.7],[12.927,3.40,3.4],[13.036,10.96,2.8],[12.332,-0.67,3.9],[11.845,1.76,3.6]], e: [[6,5],[5,2],[2,3],[3,4],[2,0],[0,1],[1,3]] },
+      { n: 'Весы', s: [[14.848,-16.04,2.8],[15.283,-9.38,2.6],[15.592,-14.79,3.9],[15.068,-25.28,3.3]], e: [[0,1],[1,2],[2,0],[0,3]] },
+      { n: 'Скорпион', s: [[16.091,-19.81,2.6],[16.006,-22.62,2.3],[15.981,-26.11,2.9],[16.353,-25.59,2.9],[16.490,-26.43,1.1],[16.598,-28.22,2.8],[16.836,-34.29,2.3],[16.864,-38.05,3.0],[16.910,-42.36,2.5],[17.203,-43.24,3.3],[17.622,-42.99,1.9],[17.793,-40.13,3.0],[17.708,-39.03,2.4],[17.560,-37.10,1.6]], e: [[0,1],[1,2],[1,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9],[9,10],[10,11],[11,12],[12,13]] },
+      { n: 'Стрелец', s: [[18.096,-30.42,3.0],[18.350,-29.83,2.7],[18.403,-34.38,1.9],[18.466,-25.42,2.8],[18.762,-26.99,3.2],[18.921,-26.30,2.1],[19.116,-27.67,3.3],[19.043,-29.88,2.6]], e: [[0,1],[1,2],[1,3],[3,4],[4,5],[5,6],[6,7],[7,2],[4,7]] },
+      { n: 'Овен', s: [[2.120,23.46,2.0],[1.911,20.81,2.6],[1.892,19.29,3.9],[2.833,27.26,3.6]], e: [[3,0],[0,1],[1,2]] },
+      { n: 'Телец', s: [[4.599,16.51,0.9],[4.477,15.87,3.4],[4.330,15.63,3.7],[4.383,17.54,3.8],[4.477,19.18,3.5],[5.627,21.14,3.0],[5.438,28.61,1.7],[4.011,12.49,3.5]], e: [[2,3],[3,4],[4,6],[2,1],[1,0],[0,5],[2,7]] },
+      { n: 'Орион', s: [[5.919,7.41,0.5],[5.418,6.35,1.6],[5.533,-0.30,2.2],[5.604,-1.20,1.7],[5.679,-1.94,1.7],[5.796,-9.67,2.1],[5.242,-8.20,0.2]], e: [[0,1],[1,2],[0,4],[2,3],[3,4],[4,5],[2,6],[6,5]] },
+      { n: 'Близнецы', s: [[7.577,31.89,1.6],[7.755,28.03,1.1],[6.629,16.40,1.9],[6.383,22.51,2.9],[6.732,25.13,3.1],[7.186,30.25,4.4],[7.335,21.98,3.5],[7.741,24.40,3.6],[7.068,20.57,3.9]], e: [[0,5],[5,4],[4,3],[1,7],[7,6],[6,8],[8,2],[0,1]] },
+      { n: 'Малый Пёс', s: [[7.655,5.22,0.3],[7.452,8.29,2.9]], e: [[0,1]] },
+      { n: 'Большой Пёс', s: [[6.752,-16.72,-1.5],[6.378,-17.96,2.0],[7.140,-26.39,1.8],[6.977,-28.97,1.5],[7.401,-29.30,2.5],[7.050,-23.83,3.0]], e: [[1,0],[0,5],[5,2],[2,3],[2,4]] }
+    ];
+
+    var RAD = Math.PI / 180;
+    var RMAX = 1;   /* радиус купола на экране: горизонт проходит через углы */
+
+    /* Где стоит человек: часовой пояс браузера — единственная подсказка,
+       которая не требует ни разрешения, ни запроса геолокации. */
+    var PLACES = {
+      'Europe/Kaliningrad': [54.71, 20.51], 'Europe/Moscow': [55.75, 37.62], 'Europe/Samara': [53.20, 50.15],
+      'Europe/Volgograd': [48.71, 44.51], 'Europe/Saratov': [51.53, 46.03], 'Europe/Astrakhan': [46.35, 48.04],
+      'Asia/Yekaterinburg': [56.84, 60.61], 'Asia/Omsk': [54.99, 73.37], 'Asia/Novosibirsk': [55.03, 82.92],
+      'Asia/Krasnoyarsk': [56.01, 92.87], 'Asia/Irkutsk': [52.29, 104.30], 'Asia/Yakutsk': [62.03, 129.73],
+      'Asia/Vladivostok': [43.12, 131.89], 'Asia/Magadan': [59.56, 150.80], 'Asia/Kamchatka': [53.02, 158.65],
+      'Asia/Sakhalin': [46.96, 142.74], 'Asia/Novokuznetsk': [53.76, 87.11], 'Asia/Barnaul': [53.35, 83.78],
+      'Europe/Minsk': [53.90, 27.57], 'Europe/Kyiv': [50.45, 30.52], 'Europe/Chisinau': [47.01, 28.86],
+      'Europe/Riga': [56.95, 24.11], 'Europe/Vilnius': [54.69, 25.28], 'Europe/Tallinn': [59.44, 24.75],
+      'Asia/Almaty': [43.24, 76.89], 'Asia/Tashkent': [41.31, 69.24], 'Asia/Bishkek': [42.87, 74.59],
+      'Asia/Tbilisi': [41.72, 44.79], 'Asia/Yerevan': [40.18, 44.51], 'Asia/Baku': [40.41, 49.87]
+    };
+    var place = null;
+    try { place = PLACES[Intl.DateTimeFormat().resolvedOptions().timeZone] || null; } catch (e) {}
+    /* незнакомый пояс: широту берём московскую, долготу — из смещения от UTC (15° на час) */
+    if (!place) place = [55.75, -new Date().getTimezoneOffset() / 4];
+    var LAT = place[0] * RAD, LON = place[1];
+
+    /* Звёздное время прямо сейчас: на экране то же небо, что человек увидит, выйдя на улицу. */
+    function siderealNow() {
+      var jd = Date.now() / 86400000 + 2440587.5;
+      var gmst = 280.46061837 + 360.98564736629 * (jd - 2451545.0);
+      return ((gmst + LON) % 360 + 360) % 360 * RAD;
+    }
+    var LST0 = siderealNow();
+    var SPIN = (Math.PI * 2) / 86164.09;   /* звёздные сутки — небо идёт со своей настоящей скоростью */
+    var dust = [];
+
+    function project(ra, dec, lst) {
+      var ha = lst - ra * 15 * RAD, sd = Math.sin(dec * RAD), cd = Math.cos(dec * RAD);
+      var alt = Math.asin(Math.max(-1, Math.min(1, sd * Math.sin(LAT) + cd * Math.cos(LAT) * Math.cos(ha))));
+      if (alt <= 0) return null;             /* под горизонтом — этой звезды сейчас не видно */
+      var az = Math.acos(Math.max(-1, Math.min(1, (sd - Math.sin(alt) * Math.sin(LAT)) / (Math.cos(alt) * Math.cos(LAT) || 1e-6))));
+      if (Math.sin(ha) > 0) az = Math.PI * 2 - az;
+      /* карта всего купола: зенит в центре экрана, горизонт по краю, север вверху, восток слева — как если смотреть вверх */
+      var r = (1 - alt / (Math.PI / 2)) * RMAX;
+      var x = W / 2 - r * Math.sin(az), y = H / 2 - r * Math.cos(az);
+      if (x < -80 || x > W + 80 || y < -80 || y > H + 80) return null;
+      return { x: x, y: y, edge: Math.min(1, alt / (12 * RAD)) };
+    }
+
+    function build() {
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      W = cv.clientWidth; H = cv.clientHeight;
+      cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      RMAX = Math.hypot(W / 2, H / 2);
+
+      /* мелкая звёздная пыль на той же сфере — вращается вместе с небом */
+      dust = [];
+      var n = Math.round(Math.min(900, Math.max(320, (W * H) / 1700)));
+      for (var i = 0; i < n; i++) {
+        dust.push({
+          ra: Math.random() * 24,
+          dec: Math.asin(Math.random() * 2 - 1) / RAD,
+          r: 0.25 + Math.random() * 0.55,
+          base: 0.14 + Math.random() * 0.26,
+          amp: 0.04 + Math.random() * 0.10,
+          sp: 0.03 + Math.random() * 0.08,
+          ph: Math.random() * Math.PI * 2
+        });
+      }
+      figs = CATALOG.map(function (c, i) { return { c: c, ph: i * 1.3 }; });
+      stars = [];
+    }
+
+    function frame(now) {
+      var t = (now - t0) / 1000;
+      var lst = reduce ? LST0 : LST0 + t * SPIN;
+      px += (tx - px) * 0.05; py += (ty - py) * 0.05;
+      ctx.clearRect(0, 0, W, H);
+
+      var reach = Math.min(W, H) * 0.34;
+
+      /* пыль */
+      for (var j = 0; j < dust.length; j++) {
+        var s = dust[j];
+        var q = project(s.ra, s.dec, lst);
+        if (!q) continue;
+        var tw = reduce ? 0 : Math.sin(t * s.sp * 2 * Math.PI + s.ph) * s.amp;
+        var nr = fine ? Math.max(0, 1 - Math.hypot(q.x - px, q.y - py) / reach) : 0;
+        var al = Math.min(0.7, (s.base + tw + nr * 0.22) * q.edge);
+        if (al <= 0.02) continue;
+        ctx.fillStyle = 'rgba(245,240,224,' + al.toFixed(3) + ')';
+        ctx.beginPath(); ctx.arc(q.x, q.y, s.r, 0, Math.PI * 2); ctx.fill();
+      }
+
+      /* созвездия — реальные фигуры, каждая по одному разу */
+      for (var fi = 0; fi < figs.length; fi++) {
+        var fg = figs[fi], cat = fg.c;
+        var P = [];
+        for (var k = 0; k < cat.s.length; k++) {
+          var st = cat.s[k];
+          var pj = project(st[0], st[1], lst);
+          P.push(pj ? { x: pj.x, y: pj.y, mag: st[2], edge: pj.edge } : null);
+        }
+        var vis = 0, cxm = 0, cym = 0;
+        for (var q2 = 0; q2 < P.length; q2++) if (P[q2]) { vis++; cxm += P[q2].x; cym += P[q2].y; }
+        if (vis < 2) continue;
+        cxm /= vis; cym /= vis;
+
+        var breathe = reduce ? 0.5 : 0.5 + 0.5 * Math.sin(t * 0.07 * Math.PI + fg.ph);
+        var near = fine ? Math.max(0, 1 - Math.hypot(cxm - px, cym - py) / (reach * 1.4)) : 0;
+
+        ctx.lineWidth = 0.8; ctx.lineCap = 'round';
+        ctx.strokeStyle = 'rgba(232,226,208,' + (0.08 + breathe * 0.06 + near * 0.16).toFixed(3) + ')';
+        ctx.beginPath();
+        for (var ei = 0; ei < cat.e.length; ei++) {
+          var A = P[cat.e[ei][0]], B = P[cat.e[ei][1]];
+          if (!A || !B) continue;
+          ctx.moveTo(A.x, A.y); ctx.lineTo(B.x, B.y);
+        }
+        ctx.stroke();
+
+        for (var pi = 0; pi < P.length; pi++) {
+          var v = P[pi];
+          if (!v) continue;
+          var rr = Math.max(0.9, 2.3 - v.mag * 0.34);
+          var tw2 = reduce ? 0 : Math.sin(t * 0.06 * 2 * Math.PI + pi * 1.7 + fg.ph) * 0.14;
+          var a2 = Math.min(1, (0.5 + (2.5 - Math.min(v.mag, 4.5)) * 0.12) * (0.62 + breathe * 0.38) + tw2 + near * 0.28) * v.edge;
+          if (a2 <= 0.02) continue;
+          var R = rr * 7;
+          var g = ctx.createRadialGradient(v.x, v.y, 0, v.x, v.y, R);
+          g.addColorStop(0, 'rgba(255,252,244,' + (a2 * 0.8).toFixed(3) + ')');
+          g.addColorStop(0.3, 'rgba(240,228,196,' + (a2 * 0.2).toFixed(3) + ')');
+          g.addColorStop(1, 'rgba(232,206,150,0)');
+          ctx.fillStyle = g;
+          ctx.beginPath(); ctx.arc(v.x, v.y, R, 0, Math.PI * 2); ctx.fill();
+          ctx.fillStyle = 'rgba(255,253,247,' + Math.min(1, a2 + 0.1).toFixed(3) + ')';
+          ctx.beginPath(); ctx.arc(v.x, v.y, rr * 0.7, 0, Math.PI * 2); ctx.fill();
+        }
+
+        /* тихая подпись созвездия */
+        var la = (0.05 + breathe * 0.05 + near * 0.22);
+        if (la > 0.05) {
+          ctx.font = '500 10px Onest, system-ui, sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillStyle = 'rgba(233,214,170,' + la.toFixed(3) + ')';
+          ctx.fillText(cat.n.toUpperCase(), cxm, cym + 34);
+        }
+      }
+
+      /* звездопад: редкий, медленный, длинный след */
+      if (!reduce) {
+        if (t > nextMeteor) {
+          nextMeteor = t + 9 + Math.random() * 12;
+          var ang = (Math.PI / 180) * (28 + Math.random() * 16);
+          meteors.push({
+            x: W * (0.05 + Math.random() * 0.7),
+            y: -H * 0.06 - Math.random() * H * 0.08,
+            vx: Math.cos(ang), vy: Math.sin(ang),
+            sp: (Math.min(W, H) * 0.0006) * (0.8 + Math.random() * 0.5),
+            len: Math.min(W, H) * (0.16 + Math.random() * 0.14),
+            life: 0, max: 4.5 + Math.random() * 2.5
+          });
+        }
+        for (var m = meteors.length - 1; m >= 0; m--) {
+          var mt = meteors[m];
+          mt.life += 1 / 60;
+          mt.x += mt.vx * mt.sp * 16; mt.y += mt.vy * mt.sp * 16;
+          var k = mt.life / mt.max;
+          if (k >= 1 || mt.x > W + 200 || mt.y > H + 200) { meteors.splice(m, 1); continue; }
+          var fade = Math.sin(Math.PI * k);            /* мягко появляется и гаснет */
+          var tailX = mt.x - mt.vx * mt.len, tailY = mt.y - mt.vy * mt.len;
+          var lg = ctx.createLinearGradient(mt.x, mt.y, tailX, tailY);
+          lg.addColorStop(0, 'rgba(255,250,236,' + (0.45 * fade).toFixed(3) + ')');
+          lg.addColorStop(0.35, 'rgba(233,199,126,' + (0.16 * fade).toFixed(3) + ')');
+          lg.addColorStop(1, 'rgba(233,199,126,0)');
+          ctx.strokeStyle = lg; ctx.lineWidth = 1.2; ctx.lineCap = 'round';
+          ctx.beginPath(); ctx.moveTo(mt.x, mt.y); ctx.lineTo(tailX, tailY); ctx.stroke();
+
+          var hg = ctx.createRadialGradient(mt.x, mt.y, 0, mt.x, mt.y, 6);
+          hg.addColorStop(0, 'rgba(255,253,246,' + (0.55 * fade).toFixed(3) + ')');
+          hg.addColorStop(1, 'rgba(240,215,154,0)');
+          ctx.fillStyle = hg;
+          ctx.beginPath(); ctx.arc(mt.x, mt.y, 6, 0, Math.PI * 2); ctx.fill();
+        }
+      }
+
+      raf = requestAnimationFrame(frame);
+    }
+
+    var raf = 0, ro;
+    build();
+    requestAnimationFrame(function () { cv.classList.add('on'); });
+    raf = requestAnimationFrame(frame);
+
+    if (fine) {
+      window.addEventListener('pointermove', function (e) {
+        var r = cv.getBoundingClientRect();
+        tx = e.clientX - r.left; ty = e.clientY - r.top;
+        if (px < -1000) { px = tx; py = ty; }
+      }, { passive: true });
+      window.addEventListener('pointerleave', function () { tx = -9999; ty = -9999; });
+    }
+
+    var rt;
+    window.addEventListener('resize', function () {
+      clearTimeout(rt); rt = setTimeout(build, 200);
+    });
+    document.addEventListener('visibilitychange', function () {
+      if (document.hidden) { cancelAnimationFrame(raf); raf = 0; }
+      /* пока вкладка была скрыта, небо успело повернуться — берём звёздное время заново */
+      else if (!raf) { t0 = performance.now(); LST0 = siderealNow(); raf = requestAnimationFrame(frame); }
+    });
+  })();
+  </script>
+
+  <script>
+  /* лёгкий параллакс луны за курсором */
+  (function () {
+    var mark = document.getElementById('moonMark');
+    if (!mark) return;
+    if (!window.matchMedia('(pointer: fine)').matches) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var img = mark.querySelector('.moon-img');
+    window.addEventListener('pointermove', function (e) {
+      var dx = (e.clientX / window.innerWidth - 0.5);
+      var dy = (e.clientY / window.innerHeight - 0.5);
+      img.style.setProperty('--tx', (dx * 14).toFixed(1) + 'px');
+      img.style.setProperty('--ty', (dy * 10).toFixed(1) + 'px');
+    }, { passive: true });
+  })();
+  </script>
+
+  <script>
+  /* живая луна: медленно прибывает и убывает (полный цикл ~90 секунд) */
+  (function () {
+    var cv = document.getElementById('moonCanvas');
+    if (!cv) return;
+    var dpr = Math.min(2, window.devicePixelRatio || 1);
+    var S = 208;
+    cv.width = S * dpr; cv.height = S * dpr;
+    var ctx = cv.getContext('2d');
+    ctx.scale(dpr, dpr);
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    /* мягкие кратеры, одни и те же на весь цикл */
+    var craters = [];
+    for (var i = 0; i < 7; i++) {
+      var a = Math.random() * Math.PI * 2, d = 0.15 + Math.random() * 0.45;
+      craters.push({ x: Math.cos(a) * d, y: Math.sin(a) * d, r: 0.05 + Math.random() * 0.09 });
+    }
+
+    var cx = S / 2, cy = S / 2, R = S * 0.34;
+    var t0 = performance.now();
+
+    function draw(now) {
+      var t = (now - t0) / 1000;
+      /* фаза 0..1: 0 — новолуние, 0.5 — полнолуние */
+      var phase = reduce ? 0.42 : ((t / 90 + 0.42) % 1); /* стартуем с почти полной золотой луны — знак бренда */
+      var p = phase * Math.PI * 2;
+      var c = Math.cos(p);            /* +1 новолуние … -1 полнолуние */
+      var waxing = phase < 0.5;
+      var glow = 0.5 + 0.5 * Math.sin(t * (Math.PI * 2) / 7); /* дыхание */
+
+      ctx.clearRect(0, 0, S, S);
+
+      /* тёплый нимб; дальше края холста он обрывается плашкой — поэтому гасим внутри */
+      var haloR = Math.min(R * 2.1, S / 2);
+      var halo = ctx.createRadialGradient(cx, cy, R * 0.6, cx, cy, haloR);
+      halo.addColorStop(0, 'rgba(240,215,154,' + (0.16 + 0.07 * glow).toFixed(3) + ')');
+      halo.addColorStop(1, 'rgba(240,215,154,0)');
+      ctx.fillStyle = halo;
+      ctx.beginPath(); ctx.arc(cx, cy, haloR, 0, Math.PI * 2); ctx.fill();
+
+      /* тёмный диск — луна видна даже в новолуние */
+      var dark = ctx.createRadialGradient(cx - R * 0.3, cy - R * 0.3, R * 0.2, cx, cy, R);
+      dark.addColorStop(0, 'rgba(62,56,92,.85)');
+      dark.addColorStop(1, 'rgba(28,24,48,.9)');
+      ctx.fillStyle = dark;
+      ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.fill();
+
+      /* освещённая часть: полукруг + терминатор-эллипс */
+      ctx.save();
+      ctx.translate(cx, cy);
+      if (!waxing) ctx.scale(-1, 1);
+      var lit = ctx.createRadialGradient(-R * 0.25, -R * 0.25, R * 0.15, 0, 0, R * 1.15);
+      lit.addColorStop(0, '#fdf4dc');
+      lit.addColorStop(0.55, '#f0d79a');
+      lit.addColorStop(1, '#c9a25a');
+      ctx.fillStyle = lit;
+      ctx.beginPath();
+      ctx.arc(0, 0, R, -Math.PI / 2, Math.PI / 2, false);
+      ctx.ellipse(0, 0, Math.max(0.001, R * Math.abs(c)), R, 0, Math.PI / 2, -Math.PI / 2, c > 0);
+      ctx.closePath();
+      ctx.fill();
+
+      /* кратеры только на освещённой стороне */
+      ctx.clip();
+      for (var k = 0; k < craters.length; k++) {
+        var cr = craters[k];
+        ctx.fillStyle = 'rgba(120,96,58,.16)';
+        ctx.beginPath();
+        ctx.arc(cr.x * R, cr.y * R, cr.r * R, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.restore();
+
+      /* тонкая золотая кромка */
+      ctx.strokeStyle = 'rgba(240,215,154,' + (0.35 + 0.15 * glow).toFixed(3) + ')';
+      ctx.lineWidth = 1.2;
+      ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.stroke();
+    }
+
+    if (reduce) { draw(t0); return; }
+    var raf = 0;
+    function frame(now) { draw(now); raf = requestAnimationFrame(frame); }
+    raf = requestAnimationFrame(frame);
+    document.addEventListener('visibilitychange', function () {
+      if (document.hidden) { cancelAnimationFrame(raf); raf = 0; }
+      else if (!raf) { t0 = performance.now(); raf = requestAnimationFrame(frame); }
+    });
   })();
   </script>
 

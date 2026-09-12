@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 160" role="img" aria-label="Лунарио">
+  <defs>
+    <radialGradient id="moon" cx="38%" cy="34%" r="78%">
+      <stop offset="0" stop-color="#f8ecc8"/>
+      <stop offset=".55" stop-color="#ecd28d"/>
+      <stop offset="1" stop-color="#c9a24b"/>
+    </radialGradient>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#e9c77e" stop-opacity=".38"/>
+      <stop offset=".6" stop-color="#e9c77e" stop-opacity=".12"/>
+      <stop offset="1" stop-color="#e9c77e" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <g transform="translate(10 22) scale(.98)">
+    <circle cx="56" cy="60" r="52" fill="url(#glow)"/>
+    <circle cx="56" cy="60" r="30" fill="url(#moon)"/>
+    <path d="M70 33a30 30 0 0 1 0 54 30 30 0 0 0 0-54Z" fill="#241d47" opacity=".18"/>
+    <g fill="#a8834a" opacity=".16">
+      <circle cx="46" cy="52" r="5.2"/>
+      <circle cx="60" cy="70" r="3.6"/>
+      <circle cx="50" cy="72" r="2.4"/>
+    </g>
+    <path d="M88 30 Q102 46 96 68" fill="none" stroke="#e9c77e" stroke-width="1" stroke-linecap="round" opacity=".35"/>
+    <g fill="#f6e3b0">
+      <circle cx="88" cy="30" r="3"/>
+      <circle cx="97" cy="46" r="2.2"/>
+      <circle cx="96" cy="68" r="2.6"/>
+    </g>
+  </g>
+  <text x="150" y="106" font-family="'Marck Script', 'Segoe Script', cursive" font-size="82" fill="#f5f2ea">Лунарио</text>
+</svg>

@@ -1,0 +1,67 @@
+/* ============================================================
+   ЛУНАРИО · Бренд-токены (этап 0)
+   Единый источник для лендинга и веб-приложения.
+   Подключение: <link rel="stylesheet" href="/brand/tokens.css">
+   или @import "/brand/tokens.css" в начале CSS.
+   ============================================================ */
+:root {
+  /* --- Ночь (фон) --- */
+  --lun-night-0: #0b0a14;   /* глубокая ночь, база */
+  --lun-night-1: #141126;   /* основной фон */
+  --lun-night-2: #1d1738;   /* приподнятые поверхности */
+  --lun-night-3: #2a2150;   /* hover-состояния поверхностей */
+
+  /* --- Текст --- */
+  --lun-text:    #f5f2ea;   /* основной, тёплый белый */
+  --lun-muted:   #b9b2cf;   /* вторичный */
+  --lun-faint:   #8f87ad;   /* подписи, футер */
+  --lun-hint:    #6f678e;   /* мелкий юридический текст */
+
+  /* --- Золото (акцент) --- */
+  --lun-gold:      #d9b868;
+  --lun-gold-2:    #f0d79a; /* светлое золото: hover, glow */
+  --lun-gold-3:    #b98f3e; /* тёмное золото: низ градиента кнопки */
+  --lun-gold-soft: #e9c77e; /* звёзды знака */
+  --lun-on-gold:   #1c1430; /* текст на золотой кнопке */
+
+  /* --- Атмосфера --- */
+  --lun-orb-violet: #6d5bd0;
+  --lun-orb-gold: rgba(217, 184, 104, .5);
+
+  /* --- Градиенты --- */
+  --lun-gradient-bg: linear-gradient(180deg, var(--lun-night-1) 0%, var(--lun-night-0) 70%);
+  --lun-gradient-gold: linear-gradient(135deg, var(--lun-gold-2) 0%, var(--lun-gold) 55%, var(--lun-gold-3) 100%);
+
+  /* --- Жидкое стекло --- */
+  --lun-glass-bg: linear-gradient(135deg, rgba(245,242,234,.10) 0%, rgba(245,242,234,.04) 45%, rgba(245,242,234,.07) 100%);
+  --lun-glass-blur: blur(22px) saturate(160%) brightness(1.08);
+  --lun-glass-shadow:
+    inset 0 1px 0 rgba(255,255,255,.22),
+    inset 0 -1px 0 rgba(0,0,0,.18),
+    0 12px 34px -14px rgba(0,0,0,.55);
+
+  /* --- Типографика --- */
+  --lun-font-display: "Comfortaa", ui-rounded, "Onest", system-ui, sans-serif;
+  --lun-font-body: "Onest", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  /* шрифты лежат на нашем сервере: с CDN Google они в России не открываются без VPN */
+  --lun-fonts-url: "/assets/css/fonts.css";
+
+  /* --- Формы --- */
+  --lun-radius-pill: 999px;  /* кнопки */
+  --lun-radius-glass: 20px;  /* стеклянные карточки */
+  --lun-radius-card: 24px;   /* карточки контента в приложении */
+
+  /* --- Тактильность --- */
+  --lun-tap-target: 62px;    /* минимальная высота основной кнопки */
+  --lun-spring: cubic-bezier(.34, 1.56, .64, 1);
+
+  /* --- oklch-дубли (для Tailwind v4 @theme) --- */
+  --lun-night-0-oklch: oklch(0.16 0.020 290);
+  --lun-night-1-oklch: oklch(0.21 0.035 292);
+  --lun-night-2-oklch: oklch(0.26 0.050 292);
+  --lun-text-oklch:    oklch(0.96 0.010 95);
+  --lun-muted-oklch:   oklch(0.76 0.030 300);
+  --lun-gold-oklch:    oklch(0.78 0.110 85);
+  --lun-gold-2-oklch:  oklch(0.88 0.090 90);
+  --lun-on-gold-oklch: oklch(0.24 0.050 300);
+}
