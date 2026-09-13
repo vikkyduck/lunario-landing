@@ -82,19 +82,13 @@
     width:min(1100px,120%);height:min(760px,95%);
     background:radial-gradient(ellipse at center, rgba(11,10,20,.62) 0%, rgba(11,10,20,.42) 45%, rgba(11,10,20,0) 75%);
   }
-  .mark{position:relative;line-height:0;margin-bottom:30px;
-    animation:float 8s ease-in-out infinite;
+  /* луна живёт внутри буквы «О»: координаты просвета меряет скрипт по глифу шрифта */
+  .o-wrap{position:relative;display:inline-block}
+  .mark{position:absolute;left:var(--mx,50%);top:var(--my,50%);width:var(--ms,.72em);height:var(--ms,.72em);
+    transform:translate(-50%,-50%);line-height:0;
     filter:drop-shadow(0 8px 40px rgba(217,184,104,.28));
-    transition:transform .5s cubic-bezier(.34,1.56,.64,1);
-    will-change:transform;
   }
-  .mark:hover{transform:scale(1.05)}
-  .moon-img{width:104px;height:104px;display:block;
-    animation:moonbreathe 7s ease-in-out infinite;
-    /* лёгкий параллакс за курсором задаётся из JS (--tx/--ty) */
-    transform:translate(var(--tx,0px),var(--ty,0px));
-    transition:transform .6s cubic-bezier(.22,1,.36,1);
-  }
+  .moon-img{width:100%;height:100%;display:block;animation:moonbreathe 7s ease-in-out infinite}
   /* дыхание: стекло медленно наливается светом */
   @keyframes moonbreathe{
     0%,100%{filter:brightness(1) saturate(1);opacity:.92}
@@ -116,7 +110,7 @@
   .wordmark{
     margin:0;font-family:"Comfortaa", ui-rounded, "Onest", system-ui, sans-serif;
     font-size:clamp(46px,7.2vw,86px);font-weight:300;
-    letter-spacing:.01em;line-height:1.14;
+    letter-spacing:.01em;line-height:1.14;white-space:nowrap;
     text-shadow:0 2px 24px rgba(11,10,20,.55);
   }
   .tagline{
@@ -257,7 +251,6 @@
 
   @media(max-width:620px){
     .stage{padding:48px 20px 130px}
-    .moon-img{width:82px;height:82px}
     .cta{margin-top:44px}
     .stores{margin-top:44px}
   }
@@ -277,12 +270,7 @@
   </div>
 
   <main class="stage" id="top">
-    <div class="mark" id="moonMark" aria-hidden="true">
-      <canvas class="moon-img" id="moonCanvas" width="208" height="208"></canvas>
-      <span class="spark s1"></span><span class="spark s2"></span><span class="spark s3"></span>
-    </div>
-
-    <h1 class="wordmark">Лунарио</h1>
+    <h1 class="wordmark hero"><span class="wm-text">Лунари</span><span class="o-wrap"><span class="o-glyph">О</span><span class="mark" id="moonMark" aria-hidden="true"><canvas class="moon-img" id="moonHello" width="208" height="208"></canvas><span class="spark s1"></span><span class="spark s2"></span><span class="spark s3"></span></span></span></h1>
     <p class="tagline">Пространство, где можно услышать себя</p>
 
     <div class="cta">
@@ -721,113 +709,169 @@
   })();
   </script>
 
-  <script>
-  /* лёгкий параллакс луны за курсором */
-  (function () {
-    var mark = document.getElementById('moonMark');
-    if (!mark) return;
-    if (!window.matchMedia('(pointer: fine)').matches) return;
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    var img = mark.querySelector('.moon-img');
-    window.addEventListener('pointermove', function (e) {
-      var dx = (e.clientX / window.innerWidth - 0.5);
-      var dy = (e.clientY / window.innerHeight - 0.5);
-      img.style.setProperty('--tx', (dx * 14).toFixed(1) + 'px');
-      img.style.setProperty('--ty', (dy * 10).toFixed(1) + 'px');
-    }, { passive: true });
-  })();
-  </script>
 
   <script>
-  /* живая луна: медленно прибывает и убывает (полный цикл ~90 секунд) */
-  (function () {
-    var cv = document.getElementById('moonCanvas');
-    if (!cv) return;
-    var dpr = Math.min(2, window.devicePixelRatio || 1);
-    var S = 208;
-    cv.width = S * dpr; cv.height = S * dpr;
-    var ctx = cv.getContext('2d');
-    ctx.scale(dpr, dpr);
-    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+/* ── Луна-буква «О»: тот же код, что в приложении (site/index.html там же); правки вносить в обоих местах ── */
+(function () {
+  const canvases = [document.getElementById('moonHello')].filter(Boolean);
+  if (!canvases.length) return;
+  let phase = 0.42;                        /* пока данных нет — молодая растущая луна */
 
-    /* мягкие кратеры, одни и те же на весь цикл */
-    var craters = [];
-    for (var i = 0; i < 7; i++) {
-      var a = Math.random() * Math.PI * 2, d = 0.15 + Math.random() * 0.45;
-      craters.push({ x: Math.cos(a) * d, y: Math.sin(a) * d, r: 0.05 + Math.random() * 0.09 });
-    }
-
-    var cx = S / 2, cy = S / 2, R = S * 0.34;
-    var t0 = performance.now();
-
-    function draw(now) {
-      var t = (now - t0) / 1000;
-      /* фаза 0..1: 0 — новолуние, 0.5 — полнолуние */
-      var phase = reduce ? 0.42 : ((t / 90 + 0.42) % 1); /* стартуем с почти полной золотой луны — знак бренда */
-      var p = phase * Math.PI * 2;
-      var c = Math.cos(p);            /* +1 новолуние … -1 полнолуние */
-      var waxing = phase < 0.5;
-      var glow = 0.5 + 0.5 * Math.sin(t * (Math.PI * 2) / 7); /* дыхание */
-
-      ctx.clearRect(0, 0, S, S);
-
-      /* тёплый нимб; дальше края холста он обрывается плашкой — поэтому гасим внутри */
-      var haloR = Math.min(R * 2.1, S / 2);
-      var halo = ctx.createRadialGradient(cx, cy, R * 0.6, cx, cy, haloR);
-      halo.addColorStop(0, 'rgba(240,215,154,' + (0.16 + 0.07 * glow).toFixed(3) + ')');
-      halo.addColorStop(1, 'rgba(240,215,154,0)');
-      ctx.fillStyle = halo;
-      ctx.beginPath(); ctx.arc(cx, cy, haloR, 0, Math.PI * 2); ctx.fill();
-
-      /* тёмный диск — луна видна даже в новолуние */
-      var dark = ctx.createRadialGradient(cx - R * 0.3, cy - R * 0.3, R * 0.2, cx, cy, R);
-      dark.addColorStop(0, 'rgba(62,56,92,.85)');
-      dark.addColorStop(1, 'rgba(28,24,48,.9)');
-      ctx.fillStyle = dark;
-      ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.fill();
-
-      /* освещённая часть: полукруг + терминатор-эллипс */
-      ctx.save();
-      ctx.translate(cx, cy);
-      if (!waxing) ctx.scale(-1, 1);
-      var lit = ctx.createRadialGradient(-R * 0.25, -R * 0.25, R * 0.15, 0, 0, R * 1.15);
-      lit.addColorStop(0, '#fdf4dc');
-      lit.addColorStop(0.55, '#f0d79a');
-      lit.addColorStop(1, '#c9a25a');
-      ctx.fillStyle = lit;
-      ctx.beginPath();
-      ctx.arc(0, 0, R, -Math.PI / 2, Math.PI / 2, false);
-      ctx.ellipse(0, 0, Math.max(0.001, R * Math.abs(c)), R, 0, Math.PI / 2, -Math.PI / 2, c > 0);
-      ctx.closePath();
-      ctx.fill();
-
-      /* кратеры только на освещённой стороне */
-      ctx.clip();
-      for (var k = 0; k < craters.length; k++) {
-        var cr = craters[k];
-        ctx.fillStyle = 'rgba(120,96,58,.16)';
-        ctx.beginPath();
-        ctx.arc(cr.x * R, cr.y * R, cr.r * R, 0, Math.PI * 2);
-        ctx.fill();
+  /* ── текстура луны: шар с освещением справа, моря и кратеры с тенями. Рисуется один раз на размер и кэшируется ── */
+  function seeded(n) { let x = n >>> 0; return () => { x = (x * 1664525 + 1013904223) >>> 0; return x / 4294967296; }; }
+  const MARIA = [[-0.34, -0.28, 0.30, 0.24, -0.4], [0.18, -0.34, 0.22, 0.17, 0.3], [0.42, -0.02, 0.19, 0.24, 0.2], [-0.48, 0.12, 0.20, 0.30, 0.1],
+                 [-0.12, 0.22, 0.17, 0.14, 0.6], [0.24, 0.38, 0.14, 0.11, -0.2], [0.05, -0.05, 0.12, 0.09, 0.9]];
+  function buildCraters() {
+    const rnd = seeded(20260913), out = [];
+    const tryPut = (r) => {
+      for (let k = 0; k < 40; k++) {
+        const a = rnd() * Math.PI * 2, d = Math.sqrt(rnd()) * 0.9;
+        const x = Math.cos(a) * d, y = Math.sin(a) * d;
+        if (out.every((o) => Math.hypot(o[0] - x, o[1] - y) > (o[2] + r) * 1.1)) { out.push([x, y, r, rnd()]); return; }
       }
-      ctx.restore();
-
-      /* тонкая золотая кромка */
-      ctx.strokeStyle = 'rgba(240,215,154,' + (0.35 + 0.15 * glow).toFixed(3) + ')';
-      ctx.lineWidth = 1.2;
-      ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.stroke();
+    };
+    for (let i = 0; i < 4; i++) tryPut(0.075 + rnd() * 0.035);
+    for (let i = 0; i < 9; i++) tryPut(0.04 + rnd() * 0.03);
+    for (let i = 0; i < 26; i++) tryPut(0.014 + rnd() * 0.02);
+    return out;
+  }
+  const CRATERS = buildCraters();
+  const texCache = new Map();
+  function moonTexture(px, R, letter) {                 /* px — сторона квадрата в устройственных пикселях, R — радиус в них */
+    const key = px + ':' + (letter ? 'l' : 'd');
+    if (texCache.has(key)) return texCache.get(key);
+    const t = document.createElement('canvas'); t.width = t.height = px;
+    const g = t.getContext('2d'); if (!g) return null;
+    g.translate(px / 2, px / 2);
+    const st = Math.min(1, Math.max(0.45, (R - 20) / 70));   /* на маленькой луне рельеф приглушаем: иначе золото мутнеет */
+    g.globalAlpha = 1;
+    /* шар: свет справа-сверху, к лимбу темнее */
+    const body = g.createRadialGradient(R * 0.35, -R * 0.3, R * 0.1, 0, 0, R * 1.05);
+    body.addColorStop(0, '#fffbe8'); body.addColorStop(0.5, '#fae4a2'); body.addColorStop(1, '#f0cf78');
+    g.fillStyle = body; g.beginPath(); g.arc(0, 0, R, 0, Math.PI * 2); g.fill();
+    g.save(); g.beginPath(); g.arc(0, 0, R, 0, Math.PI * 2); g.clip();
+    /* моря — тёмные пятна с мягким краем */
+    for (const [x, y, rx, ry, rot] of MARIA) {
+      g.save(); g.translate(x * R, y * R); g.rotate(rot); g.scale(rx * R, ry * R);
+      const m = g.createRadialGradient(0, 0, 0, 0, 0, 1);
+      m.addColorStop(0, `rgba(200,155,70,${0.16 * st})`); m.addColorStop(0.7, `rgba(200,155,70,${0.08 * st})`); m.addColorStop(1, 'rgba(200,155,70,0)');
+      g.fillStyle = m; g.beginPath(); g.arc(0, 0, 1, 0, Math.PI * 2); g.fill(); g.restore();
     }
+    /* зерно поверхности */
+    const rnd = seeded(7);
+    const dots = Math.round(R * R * 0.9);
+    for (let i = 0; i < dots; i++) {
+      const a = rnd() * Math.PI * 2, d = Math.sqrt(rnd()) * R, sz = 0.6 + rnd() * 1.6;
+      g.fillStyle = rnd() < 0.5 ? `rgba(200,155,70,${0.04 * st})` : `rgba(255,252,235,${0.08 * st})`;
+      g.beginPath(); g.arc(Math.cos(a) * d, Math.sin(a) * d, sz, 0, Math.PI * 2); g.fill();
+    }
+    /* кратеры: дно темнее, тень от вала слева (свет справа), блик вала справа */
+    for (const [x, y, rr, v] of CRATERS) {
+      const cx = x * R, cy = y * R, r = rr * R;
+      const floor = g.createRadialGradient(cx - r * 0.2, cy + r * 0.1, r * 0.1, cx, cy, r);
+      floor.addColorStop(0, `rgba(190,140,60,${(0.16 + v * 0.08) * st})`); floor.addColorStop(0.85, `rgba(190,140,60,${(0.11 + v * 0.05) * st})`); floor.addColorStop(1, 'rgba(190,140,60,0)');
+      g.fillStyle = floor; g.beginPath(); g.arc(cx, cy, r, 0, Math.PI * 2); g.fill();
+      g.lineWidth = Math.max(0.6, r * 0.22);
+      g.strokeStyle = `rgba(160,115,50,${0.22 * st})`; g.beginPath(); g.arc(cx, cy, r * 0.88, Math.PI * 0.55, Math.PI * 1.45); g.stroke();      /* тень внутри, слева */
+      g.strokeStyle = 'rgba(255,252,235,.45)'; g.beginPath(); g.arc(cx, cy, r * 0.98, -Math.PI * 0.45, Math.PI * 0.45); g.stroke();  /* освещённый вал справа */
+    }
+    g.restore();
+    texCache.set(key, t); return t;
+  }
 
-    if (reduce) { draw(t0); return; }
-    var raf = 0;
-    function frame(now) { draw(now); raf = requestAnimationFrame(frame); }
-    raf = requestAnimationFrame(frame);
-    document.addEventListener('visibilitychange', function () {
-      if (document.hidden) { cancelAnimationFrame(raf); raf = 0; }
-      else if (!raf) { t0 = performance.now(); raf = requestAnimationFrame(frame); }
+  function draw(cv) {
+    const letter = cv.id === 'moonHello';        /* луна-буква в заголовке: без своего ободка — ободком служит буква */
+    const dpr = Math.min(2, window.devicePixelRatio || 1);
+    /* логический размер (208 или 92) запоминаем при первом рисовании: запись в cv.width меняет и атрибут width,
+       и если читать его каждый раз, холст удваивается с каждым кадром, пока GPU не откажет — тогда на месте луны
+       Chrome рисует серый квадрат «сломанного холста» */
+    if (!cv.dataset.s) cv.dataset.s = cv.getAttribute('width');
+    const S = +cv.dataset.s, px = S * dpr;
+    if (cv.width !== px || cv.height !== px) { cv.width = px; cv.height = px; }
+    const ctx = cv.getContext('2d');
+    if (!ctx || (ctx.isContextLost && ctx.isContextLost())) return;   /* контекст потерян — дорисуем по contextrestored */
+    const R = S * 0.34, Rp = R * dpr;
+    const p = phase * Math.PI * 2, c = Math.cos(p), waxing = phase < 0.5, sign = waxing ? 1 : -1;
+    const tex = moonTexture(px, Rp, letter); if (!tex) return;
+    /* всё рисуем в устройственных пикселях; при убывающей луне зеркалим по x — свет на текстуре всегда справа */
+    const litPath = (g) => { g.beginPath(); g.arc(0, 0, Rp, -Math.PI / 2, Math.PI / 2, false); g.ellipse(0, 0, Math.max(0.001, Rp * Math.abs(c)), Rp, 0, Math.PI / 2, -Math.PI / 2, c > 0); g.closePath(); };
+
+    ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, px, px);
+    /* тёплый нимб — гаснет внутри холста, иначе виден его квадрат */
+    const haloR = Math.min(Rp * 2.1, px / 2);
+    const halo = ctx.createRadialGradient(px / 2, px / 2, Rp * 0.6, px / 2, px / 2, haloR);
+    halo.addColorStop(0, 'rgba(240,215,154,.30)'); halo.addColorStop(1, 'rgba(240,215,154,0)');
+    ctx.fillStyle = halo; ctx.beginPath(); ctx.arc(px / 2, px / 2, haloR, 0, Math.PI * 2); ctx.fill();
+
+    ctx.setTransform(sign, 0, 0, 1, px / 2, px / 2);
+    /* ночная сторона: та же поверхность в сумерках — рельеф едва читается */
+    ctx.drawImage(tex, -px / 2, -px / 2);
+    ctx.fillStyle = 'rgba(22,19,42,.86)';               /* ночная сторона — цвет самого неба, сквозь него едва проступает рельеф */
+    ctx.beginPath(); ctx.arc(0, 0, Rp, 0, Math.PI * 2); ctx.fill();
+    /* освещённая часть с мягким терминатором: маска размывается, если холст умеет фильтры */
+    const lit = document.createElement('canvas'); lit.width = lit.height = px;
+    const lg = lit.getContext('2d');
+    if (lg) {
+      lg.setTransform(sign, 0, 0, 1, px / 2, px / 2);
+      lg.drawImage(tex, -px / 2, -px / 2);
+      lg.globalCompositeOperation = 'destination-in';
+      if ('filter' in lg) lg.filter = `blur(${Math.max(0.6, Rp * 0.045)}px)`;
+      lg.fillStyle = '#fff'; litPath(lg); lg.fill();
+      lg.filter = 'none'; lg.globalCompositeOperation = 'source-over';
+      ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.drawImage(lit, 0, 0);
+      ctx.setTransform(sign, 0, 0, 1, px / 2, px / 2);
+    } else { ctx.save(); litPath(ctx); ctx.clip(); ctx.drawImage(tex, -px / 2, -px / 2); ctx.restore(); }
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    if (!letter) { ctx.strokeStyle = 'rgba(240,215,154,.35)'; ctx.lineWidth = 1.2 * dpr; ctx.beginPath(); ctx.arc(px / 2, px / 2, Rp, 0, Math.PI * 2); ctx.stroke(); }
+  }
+  /* Луна в заголовке — знак бренда, как на обложке сайта: проходит цикл за 22 секунды, начиная с почти полной.
+     Настоящая фаза — у луны на главной. */
+  const hello = canvases.find((cv) => cv.id === 'moonHello');
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const helloPhase = (t) => reduce ? 0.42 : ((t / 22 + 0.42) % 1);
+  const t0 = performance.now();
+  function drawAll() {
+    canvases.forEach((cv) => {
+      if (cv === hello) { const keep = phase; phase = helloPhase((performance.now() - t0) / 1000); draw(cv); phase = keep; }
+      else draw(cv);
     });
-  })();
-  </script>
+  }
+  /* Луна живёт внутри буквы «о»: меряем, где у шрифта чернила этой буквы, и ставим диск точно в её просвет */
+  const oWrap = hello && hello.closest('.o-wrap');
+  function fitMoonToO() {
+    if (!oWrap) return;
+    const h1 = oWrap.closest('.wordmark'), cs = getComputedStyle(h1), F = parseFloat(cs.fontSize);
+    const LH = parseFloat(cs.lineHeight) || F;                         /* высота строки: от неё считается базовая линия */
+    const c = document.createElement('canvas').getContext('2d'); c.font = `300 ${F}px Comfortaa, sans-serif`;
+    const m = c.measureText('О');                                     /* заглавная: луна ростом с «Л» */
+    const inkW = m.actualBoundingBoxLeft + m.actualBoundingBoxRight, inkH = m.actualBoundingBoxAscent + m.actualBoundingBoxDescent;
+    const asc = m.fontBoundingBoxAscent || F * 0.89, desc = m.fontBoundingBoxDescent || F * 0.23;
+    const baseline = (LH - (asc + desc)) / 2 + asc;
+    const cx = -m.actualBoundingBoxLeft + inkW / 2, cy = baseline - m.actualBoundingBoxAscent + inkH / 2;
+    const disc = inkH * 0.88;                                            /* диск чуть меньше просвета — обводка буквы остаётся видна */
+    oWrap.style.setProperty('--mx', cx + 'px'); oWrap.style.setProperty('--my', cy + 'px'); oWrap.style.setProperty('--ms', (disc / 0.68) + 'px');
+  }
+  if (oWrap) { fitMoonToO(); document.fonts && document.fonts.ready.then(fitMoonToO); window.addEventListener('resize', fitMoonToO); }
+  if (hello && !reduce) {
+    let last = 0;
+    (function tick(now) {
+      requestAnimationFrame(tick);
+      if (document.hidden || now - last < 250 || !hello.offsetParent) return;   /* 4 кадра в секунду хватает: фаза меняется медленно */
+      last = now; const keep = phase; phase = helloPhase((now - t0) / 1000); draw(hello); phase = keep;
+    })(0);
+  }
+  window.moonSetPhase = function (p) { if (typeof p === 'number' && p >= 0 && p <= 1) phase = p; drawAll(); };
+  /* Chrome в фоне «усыпляет» холсты и может потерять их 2D-контекст; без обработчика на месте луны
+     остаётся серый квадрат с «сломанной картинкой». Просим контекст обратно и рисуем заново. */
+  canvases.forEach((cv) => {
+    cv.addEventListener('contextlost', (e) => e.preventDefault());
+    cv.addEventListener('contextrestored', () => draw(cv));
+  });
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) drawAll(); });
+  window.addEventListener('pageshow', drawAll);
+  drawAll();
+})();
+</script>
 
 </body>
 </html>

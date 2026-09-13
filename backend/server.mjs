@@ -19,7 +19,7 @@
 //   METRIKA_ID        — номер счётчика Яндекс Метрики (пусто → счётчик не ставится)
 
 import http from 'node:http';
-import { readFileSync, existsSync, mkdirSync } from 'node:fs';
+import { readFileSync, existsSync, mkdirSync, statSync } from 'node:fs';
 import { dirname, join, normalize } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { DatabaseSync } from 'node:sqlite';
@@ -190,7 +190,8 @@ const MIME = {
 function serveStatic(res, relPath, cacheSec = 86400) {
   const safe = normalize(relPath).replace(/^(\.\.[/\\])+/, '');
   const file = join(SITE_DIR, safe);
-  if (!file.startsWith(normalize(SITE_DIR)) || !existsSync(file)) {
+  /* запрос каталога (например GET / без Accept: text/html от бота) раньше ронял процесс: readFileSync на папке */
+  if (!file.startsWith(normalize(SITE_DIR)) || !existsSync(file) || !statSync(file).isFile()) {
     res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
     res.end('Не найдено');
     return;
@@ -395,6 +396,7 @@ const server = http.createServer(async (req, res) => {
     res.end('Не найдено');
   } catch (e) {
     console.error('[server]', e);
+    if (res.headersSent) { try { res.end(); } catch {} return; }   /* заголовки уже ушли — второй writeHead уронил бы процесс */
     json(res, 500, { ok: false, error: 'internal' });
   }
 });
