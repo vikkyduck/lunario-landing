@@ -396,6 +396,14 @@
     document.querySelectorAll('.js-app-open').forEach(function (el) {
       el.addEventListener('click', function () { track('app_open'); });
     });
+    /* UTM с рекламной ссылки едут дальше в приложение: там они станут первым источником человека */
+    (function () {
+      var qs = new URLSearchParams(location.search), keep = new URLSearchParams();
+      ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'].forEach(function (k) { if (qs.get(k)) keep.set(k, qs.get(k)); });
+      var tail = keep.toString(); if (!tail) return;
+      document.querySelectorAll('a[href^="/app/"]').forEach(function (a) { a.href = '/app/' + (a.getAttribute('href').indexOf('?') > -1 ? a.getAttribute('href').slice(5) + '&' : '?') + tail; });
+      try { sessionStorage.setItem('lun_utm', tail); } catch (e) {}
+    })();
 
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', function () {
