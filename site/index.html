@@ -153,7 +153,7 @@
 
   /* ---------- кнопки скачивания (liquid glass) ---------- */
   .stores{
-    margin:56px 0 0;display:flex;flex-wrap:wrap;gap:14px;justify-content:center;
+    margin:44px 0 0;display:flex;flex-wrap:wrap;gap:14px;justify-content:center;
     width:min(720px,100%);
   }
   .glass{
@@ -207,10 +207,14 @@
   .glass:active{transform:scale(.97)}
   .glass > *{position:relative;z-index:1}
 
+  .store-wrap{position:relative;flex:1 1 0;min-width:200px;padding-top:16px;display:flex}
+  .soon{position:absolute;top:0;left:0;right:0;text-align:center;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-2);opacity:.85;line-height:1}
   .store{
     display:inline-flex;align-items:center;gap:12px;
-    flex:1 1 0;min-width:200px;min-height:62px;padding:12px 20px;color:var(--text);
+    flex:1 1 0;min-width:0;min-height:62px;padding:12px 20px;color:var(--text);
   }
+  .store[aria-disabled="true"]{cursor:default}
+  .store[aria-disabled="true"] .store-text{opacity:.8}
   .store-icon{flex:0 0 auto;width:24px;height:24px;color:#f5f2ea}
   .store-text{display:flex;flex-direction:column;line-height:1.15;text-align:left}
   .store-text small{font-size:11.5px;color:#d3cde6;letter-spacing:.02em}
@@ -256,7 +260,7 @@
   @media(max-width:620px){
     .stage{padding:16px 16px 8px}
     .cta{margin-top:28px}
-    .stores{margin-top:26px;gap:10px}
+    .stores{margin-top:14px;gap:10px}
     .store,.btn{min-height:56px}
     .foot{padding-bottom:12px}
     .foot-row{gap:4px 16px;font-size:12.5px;margin-bottom:6px}
@@ -266,7 +270,7 @@
   /* невысокие экраны (ландшафт, маленькие телефоны): плотнее, чтобы всё осталось на одном экране */
   @media(max-height:700px){
     .cta{margin-top:22px}
-    .stores{margin-top:18px;gap:10px}
+    .stores{margin-top:8px;gap:10px}
     .store,.btn{min-height:52px}
     .tagline{margin-top:8px}
     .foot-fine{font-size:10.5px;line-height:1.35}
@@ -299,13 +303,15 @@
     <p class="install-hint" id="installHint" hidden></p>
 
     <div class="stores" aria-label="Скачать приложение">
-      <a class="store glass" href="#" aria-label="Скачать в App Store" data-store="ios">
+      <div class="store-wrap"><span class="soon">В разработке</span>
+      <a class="store glass" href="#" aria-label="App Store — в разработке" aria-disabled="true" data-store="ios">
         <svg class="store-icon" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="currentColor">
           <path d="M17.05 12.04c-.03-2.6 2.12-3.85 2.22-3.91-1.21-1.77-3.09-2.01-3.76-2.04-1.6-.16-3.12.94-3.93.94-.81 0-2.06-.92-3.39-.89-1.74.03-3.35 1.01-4.25 2.57-1.81 3.14-.46 7.79 1.29 10.34.85 1.25 1.86 2.65 3.18 2.6 1.28-.05 1.76-.82 3.3-.82 1.54 0 1.97.82 3.32.79 1.37-.02 2.24-1.27 3.08-2.53.97-1.45 1.37-2.85 1.39-2.92-.03-.01-2.67-1.02-2.7-4.04zm-2.46-7.42c.7-.85 1.17-2.02 1.04-3.19-1.01.04-2.23.67-2.96 1.52-.65.75-1.22 1.95-1.07 3.09 1.13.09 2.29-.57 2.99-1.42z"/>
         </svg>
         <span class="store-text"><small>Загрузить в</small><b>App Store</b></span>
-      </a>
-      <a class="store glass" href="#" aria-label="Скачать в Google Play" data-store="android">
+      </a></div>
+      <div class="store-wrap"><span class="soon">В разработке</span>
+      <a class="store glass" href="#" aria-label="Google Play — в разработке" aria-disabled="true" data-store="android">
         <svg class="store-icon" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">
           <path d="M3.6 2.3c-.3.3-.5.7-.5 1.1v17.2c0 .4.2.8.5 1.1l.1.1L13.7 12 3.7 2.2z" fill="#00E676"/>
           <path d="M17.2 8.5l-3.5 3.5 3.5 3.5 4.6-2.6c1-.6 1-1.8 0-2.3l-4.6-2.1z" fill="#FFC107"/>
@@ -313,7 +319,8 @@
           <path d="M3.7 2.3c.4-.2 1.2-.2 1.9.2L17.2 9l-3.5 3.5L3.7 2.3z" fill="#40C4FF"/>
         </svg>
         <span class="store-text"><small>Доступно в</small><b>Google Play</b></span>
-      </a>
+      </a></div>
+      <div class="store-wrap">
       <a class="store glass js-app-open" href="/app/" aria-label="Установить веб-приложение" data-store="web" data-cta="web">
         <svg class="store-icon" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6">
           <circle cx="12" cy="12" r="9"/>
@@ -321,7 +328,7 @@
           <path d="M12 3a14 14 0 0 1 0 18 14 14 0 0 1 0-18Z"/>
         </svg>
         <span class="store-text"><small>Установить как</small><b>Веб-приложение</b></span>
-      </a>
+      </a></div>
     </div>
   </main>
 
