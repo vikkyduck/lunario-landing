@@ -40,8 +40,12 @@
   *{box-sizing:border-box}
   [hidden]{display:none!important}
   html,body{height:100%}
+  /* один экран без прокрутки: сцена растягивается, футер стоит внизу внутри экрана */
   body{
     margin:0;
+    height:100vh;height:100svh;height:100dvh;
+    display:flex;flex-direction:column;
+    overflow:hidden;
     font-family:"Onest", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
     color:var(--text);
     background:linear-gradient(180deg, var(--bg-1) 0%, var(--bg-0) 70%);
@@ -71,9 +75,9 @@
   /* ---------- сцена ---------- */
   .stage{
     position:relative;z-index:2;
-    min-height:100svh;min-height:100dvh;
+    flex:1 1 0;min-height:0;
     display:flex;flex-direction:column;align-items:center;justify-content:center;
-    text-align:center;padding:64px 24px 150px;
+    text-align:center;padding:24px 24px 16px;
   }
   /* мягкий скрим: успокаивает фон под текстом, границы не видно */
   .stage::before{
@@ -214,12 +218,12 @@
 
   /* ---------- футер ---------- */
   .foot{
-    position:relative;z-index:2;padding:0 24px 36px;text-align:center;color:#8f87ad;font-size:13px;
+    position:relative;z-index:2;flex:0 0 auto;padding:0 24px 18px;text-align:center;color:#8f87ad;font-size:13px;
   }
-  .foot-row{display:flex;gap:26px;flex-wrap:wrap;justify-content:center;margin-bottom:14px;font-size:13.5px;font-weight:500;color:#cfc9e4}
+  .foot-row{display:flex;gap:8px 22px;flex-wrap:wrap;justify-content:center;margin-bottom:8px;font-size:13px;font-weight:500;color:#cfc9e4}
   .foot-row a{padding:6px 2px;border-bottom:1px solid transparent;transition:.2s}
   .foot-row a:hover{color:var(--gold-2);border-color:rgba(217,184,104,.5)}
-  .foot-fine{max-width:820px;margin:0 auto;line-height:1.7;font-size:12.5px;color:#9c95b8}
+  .foot-fine{max-width:820px;margin:0 auto;line-height:1.5;font-size:11.5px;color:#9c95b8}
 
   /* ---------- cookie ---------- */
   .cookie{
@@ -250,9 +254,22 @@
   }
 
   @media(max-width:620px){
-    .stage{padding:48px 20px 130px}
-    .cta{margin-top:44px}
-    .stores{margin-top:44px}
+    .stage{padding:16px 16px 8px}
+    .cta{margin-top:28px}
+    .stores{margin-top:26px;gap:10px}
+    .store,.btn{min-height:56px}
+    .foot{padding-bottom:12px}
+    .foot-row{gap:4px 16px;font-size:12.5px;margin-bottom:6px}
+    .foot-row a{padding:3px 2px}
+    .foot-fine{font-size:10.5px;line-height:1.4}
+  }
+  /* невысокие экраны (ландшафт, маленькие телефоны): плотнее, чтобы всё осталось на одном экране */
+  @media(max-height:700px){
+    .cta{margin-top:22px}
+    .stores{margin-top:18px;gap:10px}
+    .store,.btn{min-height:52px}
+    .tagline{margin-top:8px}
+    .foot-fine{font-size:10.5px;line-height:1.35}
   }
   @media(prefers-reduced-motion:reduce){
     *{animation:none!important;transition-duration:.01ms!important}
