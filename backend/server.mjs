@@ -388,13 +388,13 @@ const server = http.createServer(async (req, res) => {
     if (url.pathname === '/sw.js') return serveStatic(res, 'sw.js', 0);
     if (url.pathname === '/robots.txt') {
       res.writeHead(200, { 'Content-Type': 'text/plain; charset=utf-8' });
-      /* ИИ-боты: сайт и приложение открыты для поиска и ответов, обучение на авторских текстах — нет (Content-Signal). */
+      /* ИИ-боты: сайт и приложение открыты для поиска, ответов и обучения (решение владелицы 16.09.2026 — ради упоминаний в ИИ-выдаче). */
       const AI_BOTS = ['GPTBot', 'ChatGPT-User', 'OAI-SearchBot', 'ClaudeBot', 'Claude-User', 'Claude-SearchBot', 'anthropic-ai', 'PerplexityBot', 'Perplexity-User',
         'Google-Extended', 'Applebot-Extended', 'Bytespider', 'CCBot', 'cohere-ai', 'Meta-ExternalAgent', 'YandexGPT', 'Amazonbot', 'DuckAssistBot'];
       return res.end([
         'User-agent: *', 'Allow: /', 'Disallow: /admin', 'Disallow: /app/api/', 'Disallow: /app/cabinet', 'Disallow: /app-test/', '',
         ...AI_BOTS.flatMap((b) => [`User-agent: ${b}`, 'Allow: /', 'Disallow: /admin', 'Disallow: /app/api/', 'Disallow: /app/cabinet', '']),
-        'Content-Signal: search=yes, ai-input=yes, ai-train=no', '',
+        'Content-Signal: search=yes, ai-input=yes, ai-train=yes', '',
         `Sitemap: ${PUBLIC_BASE}/sitemap.xml`, `Agentmap: ${PUBLIC_BASE}/.well-known/ai-catalog.json`, '',
       ].join('\n'));
     }
