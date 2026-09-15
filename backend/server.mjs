@@ -185,7 +185,7 @@ async function tgNotify(text) {
 const MIME = {
   '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8',
   '.js': 'text/javascript; charset=utf-8', '.svg': 'image/svg+xml',
-  '.woff2': 'font/woff2', '.png': 'image/png', '.ico': 'image/x-icon', '.jpg': 'image/jpeg', '.txt': 'text/plain; charset=utf-8',
+  '.woff2': 'font/woff2', '.png': 'image/png', '.ico': 'image/x-icon', '.jpg': 'image/jpeg', '.txt': 'text/plain; charset=utf-8', '.md': 'text/markdown; charset=utf-8',
 };
 function serveStatic(res, relPath, cacheSec = 86400) {
   const safe = normalize(relPath).replace(/^(\.\.[/\\])+/, '');
@@ -388,7 +388,19 @@ const server = http.createServer(async (req, res) => {
     if (url.pathname === '/sw.js') return serveStatic(res, 'sw.js', 0);
     if (url.pathname === '/robots.txt') {
       res.writeHead(200, { 'Content-Type': 'text/plain; charset=utf-8' });
-      return res.end(`User-agent: *\nAllow: /\nDisallow: /admin\nSitemap: ${PUBLIC_BASE}/sitemap.xml\n`);
+      /* ИИ-боты: сайт и приложение открыты для поиска и ответов, обучение на авторских текстах — нет (Content-Signal). */
+      const AI_BOTS = ['GPTBot', 'ChatGPT-User', 'OAI-SearchBot', 'ClaudeBot', 'Claude-User', 'Claude-SearchBot', 'anthropic-ai', 'PerplexityBot', 'Perplexity-User',
+        'Google-Extended', 'Applebot-Extended', 'Bytespider', 'CCBot', 'cohere-ai', 'Meta-ExternalAgent', 'YandexGPT', 'Amazonbot', 'DuckAssistBot'];
+      return res.end([
+        'User-agent: *', 'Allow: /', 'Disallow: /admin', 'Disallow: /app/api/', 'Disallow: /app/cabinet', 'Disallow: /app-test/', '',
+        ...AI_BOTS.flatMap((b) => [`User-agent: ${b}`, 'Allow: /', 'Disallow: /admin', 'Disallow: /app/api/', 'Disallow: /app/cabinet', '']),
+        'Content-Signal: search=yes, ai-input=yes, ai-train=no', '',
+        `Sitemap: ${PUBLIC_BASE}/sitemap.xml`, `Agentmap: ${PUBLIC_BASE}/.well-known/ai-catalog.json`, '',
+      ].join('\n'));
+    }
+    if (url.pathname === '/llms.txt') {   /* описание сайта для ИИ-агентов — markdown по конвенции llms.txt */
+      res.writeHead(200, { 'Content-Type': 'text/markdown; charset=utf-8', 'Cache-Control': 'public, max-age=3600' });
+      return res.end(readFileSync(join(SITE_DIR, 'llms.txt')));
     }
     if ((req.method === 'GET' || req.method === 'HEAD') && !url.pathname.includes('..')) return serveStatic(res, url.pathname);
 
