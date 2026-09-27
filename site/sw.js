@@ -5,7 +5,7 @@
 
    Зона приложения (/app/) обслуживается собственным SW — сюда не лезем:
    у него более узкая зона, поэтому там он и остаётся главным. */
-const CACHE = 'lunario-site-v2';
+const CACHE = 'lunario-site-v3';
 
 self.addEventListener('install', () => self.skipWaiting());
 
@@ -26,7 +26,14 @@ self.addEventListener('fetch', (e) => {
   // приложение, его API и заявки лендинга всегда идут в сеть напрямую
   if (url.pathname.startsWith('/app') || url.pathname.startsWith('/api') || url.pathname.startsWith('/admin')) return;
 
-  // сначала сеть, чтобы правки лендинга появлялись сразу; кэш — запасной путь без связи
+  // HTML-страницы лендинга не сохраняем: устаревшая главная со скриншотами
+  // не должна возвращаться даже как офлайн-копия.
+  if (req.mode === 'navigate' || req.destination === 'document') {
+    e.respondWith(fetch(req, { cache: 'no-store' }));
+    return;
+  }
+
+  // Статические файлы: сначала сеть, кэш — запасной путь без связи.
   e.respondWith((async () => {
     try {
       const fresh = await fetch(req);
@@ -38,10 +45,6 @@ self.addEventListener('fetch', (e) => {
     } catch (err) {
       const hit = await caches.match(req);
       if (hit) return hit;
-      if (req.mode === 'navigate') {
-        const home = await caches.match('/');
-        if (home) return home;
-      }
       throw err;
     }
   })());

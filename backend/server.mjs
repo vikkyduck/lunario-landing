@@ -241,7 +241,7 @@ function handleLanding(req, res, url) {
   }
   const headers = {
     'Content-Type': 'text/html; charset=utf-8',
-    'Cache-Control': 'no-cache',
+    'Cache-Control': 'no-store, max-age=0',
   };
   if (setCookie) {
     headers['Set-Cookie'] = `lunario_ab=${v}; Path=/; Max-Age=7776000; SameSite=Lax; HttpOnly`;

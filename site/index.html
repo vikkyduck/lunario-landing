@@ -414,7 +414,9 @@
 
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', function () {
-        navigator.serviceWorker.register('/sw.js').catch(function () { /* без SW сайт работает как обычно */ });
+        navigator.serviceWorker.register('/sw.js?v=3', { updateViaCache: 'none' }).then(function (registration) {
+          registration.update().catch(function () {});
+        }).catch(function () { /* без SW сайт работает как обычно */ });
       });
     }
 
