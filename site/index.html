@@ -122,6 +122,18 @@
     color:#f5f2ea;max-width:30em;line-height:1.6;letter-spacing:.005em;
     text-shadow:0 1px 12px rgba(11,10,20,.7);
   }
+  .inside-link{
+    margin-top:22px;display:inline-flex;align-items:center;justify-content:center;gap:10px;
+    min-height:46px;padding:0 22px;border-radius:999px;
+    border:1px solid rgba(245,242,234,.24);background:rgba(245,242,234,.055);
+    color:#f5f2ea;font-size:15px;font-weight:600;letter-spacing:.01em;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 10px 28px -18px rgba(0,0,0,.7);
+    transition:transform .2s ease,background .2s ease,border-color .2s ease,color .2s ease;
+  }
+  .inside-link span{color:var(--gold-2);font-size:18px;line-height:1;transition:transform .2s ease}
+  .inside-link:hover{transform:translateY(-2px);background:rgba(245,242,234,.1);border-color:rgba(217,184,104,.5)}
+  .inside-link:hover span{transform:translateX(3px)}
+  .inside-link:active{transform:scale(.98)}
 
   /* ---------- CTA ---------- */
   .cta{margin-top:52px;display:flex;flex-direction:column;align-items:center;gap:14px;width:min(360px,100%)}
@@ -144,7 +156,7 @@
   }
   .btn-ghost:hover{background:rgba(245,242,234,.1);border-color:rgba(245,242,234,.45)}
   .btn-ghost:active{transform:scale(.98)}
-  .btn:focus-visible,.foot a:focus-visible,.btn-cookie:focus-visible,.store:focus-visible{
+  .btn:focus-visible,.inside-link:focus-visible,.foot a:focus-visible,.btn-cookie:focus-visible,.store:focus-visible{
     outline:2px solid var(--gold-2);outline-offset:3px;
   }
   .install-hint{margin:22px auto 0;max-width:520px;font-size:15.5px;line-height:1.65;color:#ded8ee;text-shadow:0 1px 10px rgba(11,10,20,.6)}
@@ -153,7 +165,7 @@
 
   /* ---------- кнопки скачивания (liquid glass) ---------- */
   .stores{
-    margin:44px 0 0;display:flex;flex-wrap:wrap;gap:14px;justify-content:center;
+    margin:22px 0 0;display:flex;flex-wrap:wrap;gap:14px;justify-content:center;
     width:min(720px,100%);
   }
   .glass{
@@ -260,6 +272,7 @@
   @media(max-width:620px){
     .stage{padding:16px 16px 8px}
     .cta{margin-top:28px}
+    .inside-link{margin-top:16px;min-height:44px}
     .stores{margin-top:14px;gap:10px}
     .store,.btn{min-height:56px}
     .foot{padding-bottom:12px}
@@ -270,6 +283,7 @@
   /* невысокие экраны (ландшафт, маленькие телефоны): плотнее, чтобы всё осталось на одном экране */
   @media(max-height:700px){
     .cta{margin-top:22px}
+    .inside-link{margin-top:10px;min-height:40px;padding-inline:18px}
     .stores{margin-top:8px;gap:10px}
     .store,.btn{min-height:52px}
     .tagline{margin-top:8px}
@@ -293,6 +307,9 @@
   <main class="stage" id="top">
     <h1 class="wordmark hero"><span class="wm-text">Лунари</span><span class="o-wrap"><span class="o-glyph">О</span><span class="mark" id="moonMark" aria-hidden="true"><canvas class="moon-img" id="moonHello" width="208" height="208"></canvas><span class="spark s1"></span><span class="spark s2"></span><span class="spark s3"></span></span></span></h1>
     <p class="tagline">Пространство, где можно услышать себя</p>
+    <a class="inside-link js-cta" href="/chto-vnutri" aria-label="Посмотреть, что внутри приложения" data-cta="inside">
+      Что внутри <span aria-hidden="true">→</span>
+    </a>
 
     <div class="cta">
       <button class="btn btn-ghost glass" type="button" id="installBtn" hidden>
@@ -334,7 +351,6 @@
 
   <footer class="foot">
     <nav class="foot-row" aria-label="Ссылки">
-      <a href="/chto-vnutri">Что внутри</a>
       <a href="https://t.me/lunario_oline" target="_blank" rel="noopener">Telegram</a>
       <a href="https://www.instagram.com/lunario.online/" target="_blank" rel="noopener">Instagram*</a>
       <a href="/politika">Политика конфиденциальности</a>
